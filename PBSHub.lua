@@ -66,7 +66,6 @@ if not getgenv().Network then
 	Network.RetainPart = function(Part)
 		if typeof(Part) == "Instance" and Part:IsA("BasePart") and Part:IsDescendantOf(workspace) then
 			table.insert(Network.BaseParts, Part)
-			Part.Massless = true
 			Part.CanCollide = false
 		end
 	end
@@ -91,7 +90,7 @@ local function onChildAdded(child: Instance)
 		child.CanCollide = false
 		child.CanQuery = false
 		child.CanTouch = false
-		child.CustomPhysicalProperties = PhysicalProperties.new(0, 0, 0, 0, 0)
+		child.Massless = true
 		
 		local bodyPosition = Instance.new("BodyPosition", child)    
 		bodyPosition.D = 500
@@ -104,9 +103,6 @@ local function onChildAdded(child: Instance)
 		bodyAngularVelocity.MaxTorque = Vector3.new("inf", "inf", "inf")
 		bodyAngularVelocity.AngularVelocity = Vector3.new(100000000, 100000000, 100000000)    
 
-		local Torque = Instance.new("Torque", child)
-       		Torque.Torque = Vector3.new(100000, 100000, 100000)
-
 		local Attachment0 = Instance.new("Attachment", child)
 		local Attachment1 = localPlayer.Character.HumanoidRootPart.RootAttachment
 		
@@ -115,7 +111,7 @@ local function onChildAdded(child: Instance)
 		local AlignPosition = Instance.new("AlignPosition", child)
         	AlignPosition.MaxForce = 9999999999999999
         	AlignPosition.MaxVelocity = math.huge
-        	AlignPosition.Responsiveness = 500
+        	AlignPosition.Responsiveness = 200
         	AlignPosition.Attachment0 = Attachment0
        		AlignPosition.Attachment1 = Attachment1
 		
@@ -126,7 +122,7 @@ end
 local StarterGui = game:GetService("StarterGui")
 StarterGui:SetCore("SendNotification", {
     Title = "PBS Hub by samopato",
-    Text = "Loaded 🤑",
+    Text = "Loaded 👅👅👅",
     Icon = "rbxassetid://89210547385522",
     Duration = 5
 })
