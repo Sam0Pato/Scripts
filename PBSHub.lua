@@ -22,7 +22,6 @@ local function activateTools()
 	for _,tool in pairs(toolTable) do
 		tool.Parent = localPlayer.Character
 		tool:Activate()
-		task.wait(0.003)
 		tool.Parent = localPlayer.Backpack
 	end
 	
@@ -96,6 +95,10 @@ end
 
 local function onChildAdded(child: Instance)
 	if child:IsA("BasePart") then
+		child.CanCollide = false
+		child.CanQuery = false
+		child.CanTouch = false
+		
 		local bodyPosition = Instance.new("BodyPosition")    
 		bodyPosition.D = 500
 		bodyPosition.P = 30000
