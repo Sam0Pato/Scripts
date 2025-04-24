@@ -16,13 +16,13 @@ local paperTable = {}
 
 local function activateTools()
 	debounce = true
-
-	warn("cu")
 	
 	for _,tool in pairs(toolTable) do
-		tool.Parent = localPlayer.Character
-		tool:Activate()
-		tool.Parent = localPlayer.Backpack
+		coroutine.Wrap(function()
+			tool.Parent = localPlayer.Character
+			tool:Activate()
+			tool.Parent = localPlayer.Backpack
+		end()
 	end
 	
 	task.wait(0.75)
@@ -98,6 +98,7 @@ local function onChildAdded(child: Instance)
 		child.CanCollide = false
 		child.CanQuery = false
 		child.CanTouch = false
+		child.CustomPhysicalProperties = PhysicalProperties.new(0, 0, 0, 0, 0)
 		
 		local bodyPosition = Instance.new("BodyPosition")    
 		bodyPosition.D = 500
