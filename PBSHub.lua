@@ -99,12 +99,6 @@ local function onChildAdded(child: Instance)
 	child.CanQuery = false
 	child.CanTouch = false
 	child.CustomPhysicalProperties = PhysicalProperties.new(0.0001, 0.0001, 0.0001, 0.0001, 0.0001)
-		
-	local bodyPosition = Instance.new("BodyPosition", child)    
-	bodyPosition.D = 500
-	bodyPosition.P = 30000
-	bodyPosition.MaxForce = Vector3.new("inf", "inf", "inf")
-	bodyPosition.Position = mouse.Hit.Position
 
 	local bodyAngularVelocity = Instance.new("BodyAngularVelocity", child)    
 	bodyAngularVelocity.P = "inf"
