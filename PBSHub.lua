@@ -32,7 +32,7 @@ local function activateTools()
 		end)
 	end
 	
-	task.wait(0.75)
+	task.wait(1)
 	
 	debounce = false
 end
@@ -90,7 +90,7 @@ local function onHeartbeat()
 		end
 		
                 local directionToTarget = (mousePosition - child.Position).unit
-                child.Velocity = directionToTarget * 1000
+                child.Velocity = directionToTarget * 10000
 	end
 end 
 
@@ -114,16 +114,19 @@ local function onChildAdded(child: Instance)
 		bodyAngularVelocity.AngularVelocity = Vector3.new(100000000, 100000000, 100000000)    
 		bodyAngularVelocity.Parent = child
 
-		local Torque = Instance.new("Torque", v)
+		local Torque = Instance.new("Torque", child)
        		Torque.Torque = Vector3.new(100000, 100000, 100000)
-		local Attachment2 = Instance.new("Attachment", v)
+
+		local Attachment0 = Instance.new("Attachment", child)
+		local Attachment1 = Instance.new("Attachment", child)
+		
 		Torque.Attachment0 = Attachment2
 				
-		local AlignPosition = Instance.new("AlignPosition", v)
+		local AlignPosition = Instance.new("AlignPosition", child)
         	AlignPosition.MaxForce = 9999999999999999
         	AlignPosition.MaxVelocity = math.huge
         	AlignPosition.Responsiveness = 500
-        	AlignPosition.Attachment0 = Attachment2
+        	AlignPosition.Attachment0 = Attachment0
        		AlignPosition.Attachment1 = Attachment1
 		
 		table.insert(paperTable, child)
