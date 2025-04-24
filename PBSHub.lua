@@ -23,11 +23,11 @@ local function activateTools()
 			continue
 		end
 		
-		tool.Parent = speaker.Character
+		tool.Parent = localPlayer.Character
 		
 		task.spawn(function()
 			tool:Activate()
-			tool.Parent = Backpack
+			tool.Parent = backpack
 		end)
 	end
 	
