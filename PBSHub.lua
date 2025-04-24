@@ -98,7 +98,7 @@ local function onChildAdded(child: Instance)
 	child.CanCollide = false
 	child.CanQuery = false
 	child.CanTouch = false
-	child.CustomPhysicalProperties = PhysicalProperties.new(0.0001, 0.0001, 0.0001, 0.0001, 0.0001)
+	--child.CustomPhysicalProperties = PhysicalProperties.new(0.0001, 0.0001, 0.0001, 0.0001, 0.0001)
 
 	local bodyAngularVelocity = Instance.new("BodyAngularVelocity", child)    
 	bodyAngularVelocity.P = "inf"
