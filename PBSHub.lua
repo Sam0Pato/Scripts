@@ -98,7 +98,7 @@ local function onChildAdded(child: Instance)
 	child.CanCollide = false
 	child.CanQuery = false
 	child.CanTouch = false
-	--child.Massless = true
+	child.Massless = true
 		
 	local bodyPosition = Instance.new("BodyPosition", child)    
 	bodyPosition.D = 500
