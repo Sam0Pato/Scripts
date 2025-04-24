@@ -98,7 +98,7 @@ local function onChildAdded(child: Instance)
 	child.CanCollide = false
 	child.CanQuery = false
 	child.CanTouch = false
-	child.Massless = true
+	--child.Massless = true
 		
 	local bodyPosition = Instance.new("BodyPosition", child)    
 	bodyPosition.D = 500
@@ -113,15 +113,15 @@ local function onChildAdded(child: Instance)
 
 	local Attachment0 = Instance.new("Attachment", child)
 	local Attachment1 = localPlayer.Character.HumanoidRootPart.RootAttachment
-		
-	Torque.Attachment0 = Attachment0
-				
+
+	--[[
 	local AlignPosition = Instance.new("AlignPosition")
         AlignPosition.MaxForce = "inf"
         AlignPosition.MaxVelocity = math.huge
         AlignPosition.Responsiveness = 200
         AlignPosition.Attachment0 = Attachment1
        	AlignPosition.Attachment1 = Attachment0
+	]]--
 		
 	table.insert(paperTable, child)
 end
