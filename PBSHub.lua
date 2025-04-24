@@ -89,8 +89,8 @@ local function onHeartbeat()
 			continue
 		end
 		
-                local directionToTarget = (mousePosition - child.Position).unit
-                child.Velocity = directionToTarget * 10000
+                --local directionToTarget = (mousePosition - child.Position).unit
+                child.BodyPosition.Position = mousePosition
 	end
 end 
 
@@ -101,18 +101,16 @@ local function onChildAdded(child: Instance)
 		child.CanTouch = false
 		child.CustomPhysicalProperties = PhysicalProperties.new(0, 0, 0, 0, 0)
 		
-		local bodyPosition = Instance.new("BodyPosition")    
+		local bodyPosition = Instance.new("BodyPosition", child)    
 		bodyPosition.D = 500
 		bodyPosition.P = 30000
 		bodyPosition.MaxForce = Vector3.new("inf", "inf", "inf")
 		bodyPosition.Position = mouse.Hit.Position
-		bodyPosition.Parent = child
 
-		local bodyAngularVelocity = Instance.new("BodyAngularVelocity")    
+		local bodyAngularVelocity = Instance.new("BodyAngularVelocity", child)    
 		bodyAngularVelocity.P = "inf"
 		bodyAngularVelocity.MaxTorque = Vector3.new("inf", "inf", "inf")
 		bodyAngularVelocity.AngularVelocity = Vector3.new(100000000, 100000000, 100000000)    
-		bodyAngularVelocity.Parent = child
 
 		local Torque = Instance.new("Torque", child)
        		Torque.Torque = Vector3.new(100000, 100000, 100000)
@@ -120,7 +118,7 @@ local function onChildAdded(child: Instance)
 		local Attachment0 = Instance.new("Attachment", child)
 		local Attachment1 = Instance.new("Attachment", child)
 		
-		Torque.Attachment0 = Attachment2
+		Torque.Attachment0 = Attachment0
 				
 		local AlignPosition = Instance.new("AlignPosition", child)
         	AlignPosition.MaxForce = 9999999999999999
