@@ -116,7 +116,7 @@ local function onChildAdded(child: Instance)
 		
 	Torque.Attachment0 = Attachment0
 				
-	local AlignPosition = Instance.new("AlignPosition", child)
+	local AlignPosition = Instance.new("AlignPosition")
         AlignPosition.MaxForce = "inf"
         AlignPosition.MaxVelocity = math.huge
         AlignPosition.Responsiveness = 200
@@ -133,6 +133,7 @@ StarterGui:SetCore("SendNotification", {
     Icon = "rbxassetid://89210547385522",
     Duration = 5
 })
+
 
 workspace.ChildAdded:Connect(onChildAdded)
 UserInputService.InputBegan:Connect(onInputBegan)
