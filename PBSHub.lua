@@ -18,11 +18,11 @@ local function activateTools()
 	debounce = true
 	
 	for _,tool in pairs(toolTable) do
-		coroutine.Wrap(function()
+		coroutine.wrap(function()
 			tool.Parent = localPlayer.Character
 			tool:Activate()
 			tool.Parent = localPlayer.Backpack
-		end()
+		end)()
 	end
 	
 	task.wait(0.75)
