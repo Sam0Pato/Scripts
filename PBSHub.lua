@@ -3,9 +3,8 @@
 -- << VARIABLES >> --
 
 local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
 
-local renderStepped = game:GetService("RunService").RenderStepped
-local heartBeat = game:GetService("RunService").HeartBeat
 local localPlayer = game:GetService("Players").LocalPlayer
 local mouse = localPlayer:GetMouse()
 
@@ -73,7 +72,7 @@ if not getgenv().Network then
 	
 	local function EnablePartControl()
 		localPlayer.ReplicationFocus = workspace
-		heartBeat:Connect(function()
+		RunService.Heartbeat:Connect(function()
 			sethiddenproperty(localPlayer, "SimulationRadius", math.huge)
 			for _, Part in pairs(paperTable) do
 				Part.Velocity = Network.Velocity
@@ -84,7 +83,7 @@ if not getgenv().Network then
 	EnablePartControl()
 end
 
-local function onRenderStepped()
+local function onHeartbeat()
 	local hit = mouse.Hit.Position    
 	local mousePosition = Vector3.new(hit.X, hit.Y + 2.5, hit.Z)
 
@@ -145,4 +144,4 @@ StarterGui:SetCore("SendNotification", {
 workspace.ChildAdded:Connect(onChildAdded)
 UserInputService.InputBegan:Connect(onInputBegan)
 localPlayer.Backpack.ChildAdded:Connect(onToolAdded)
-renderStepped:Connect(onRenderStepped)
+RunService.Heartbeat:Connect(onHeartbeat)
