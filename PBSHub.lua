@@ -117,8 +117,8 @@ local function onChildAdded(child: Instance)
         AlignPosition.MaxForce = "inf"
         AlignPosition.MaxVelocity = math.huge
         AlignPosition.Responsiveness = 200
-        AlignPosition.Attachment0 = Attachment1
-       	AlignPosition.Attachment1 = Attachment0
+        AlignPosition.Attachment0 = Attachment0
+       	AlignPosition.Attachment1 = Attachment1
 		
 	table.insert(paperTable, child)
 end
