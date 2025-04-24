@@ -81,7 +81,7 @@ local function onRenderStepped()
 		end
 
 		sethiddenproperty(localPlayer, "SimulationRadius", math.huge)
-                child.Position = mousePosition
+                child.BodyPosition.Position = mousePosition
 	end
 end 
 
@@ -98,6 +98,12 @@ local function onChildAdded(child: Instance)
 	child.CanCollide = false
 	child.CanQuery = false
 	child.CanTouch = false
+
+	local bodyPosition = Instance.new("BodyPosition", child)    
+        bodyPosition.D = 500
+        bodyPosition.P = 30000
+        bodyPosition.MaxForce = Vector3.new("inf", "inf", "inf")
+        bodyPosition.Position = mouse.Hit.Position
 	
 	local bodyAngularVelocity = Instance.new("BodyAngularVelocity", child)    
 	bodyAngularVelocity.P = "inf"
