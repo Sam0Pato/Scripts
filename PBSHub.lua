@@ -93,9 +93,8 @@ local function onRenderStepped()
 			continue
 		end
 		
-		child.AssemblyLinearVelocity = Vector3.new("inf", "inf", "inf")
-		child.AssemblyAngularVelocity = Vector3.new("inf", "inf", "inf")
-		child.BodyPosition.Position = mousePosition
+                local directionToTarget = (mousePosition - child.Position).unit
+                child.Velocity = directionToTarget * 1000
 	end
 end 
 
