@@ -64,7 +64,7 @@ if not getgenv().Network then
 	Network.RetainPart = function(Part)
 		if typeof(Part) == "Instance" and Part:IsA("BasePart") and Part:IsDescendantOf(workspace) then
 			table.insert(Network.BaseParts, Part)
-			Part.CustomPhysicalProperties = PhysicalProperties.new(0, 0, 0, 0, 0)
+			Part.CustomPhysicalProperties = PhysicalProperties.new(0.0001, 0.0001, 0.0001, 0.0001, 0.0001)
 			Part.CanCollide = false
 		end
 	end
@@ -118,6 +118,18 @@ local function onChildAdded(child: Instance)
 		bodyAngularVelocity.MaxTorque = Vector3.new("inf", "inf", "inf")
 		bodyAngularVelocity.AngularVelocity = Vector3.new(100000000, 100000000, 100000000)    
 		bodyAngularVelocity.Parent = child
+
+		local Torque = Instance.new("Torque", v)
+       		Torque.Torque = Vector3.new(100000, 100000, 100000)
+		local Attachment2 = Instance.new("Attachment", v)
+		Torque.Attachment0 = Attachment2
+				
+		local AlignPosition = Instance.new("AlignPosition", v)
+        	AlignPosition.MaxForce = 9999999999999999
+        	AlignPosition.MaxVelocity = math.huge
+        	AlignPosition.Responsiveness = 200
+        	AlignPosition.Attachment0 = Attachment2
+       		AlignPosition.Attachment1 = Attachment1
 		
 		table.insert(paperTable, child)
 	end
