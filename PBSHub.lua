@@ -49,7 +49,8 @@ local function onInputBegan(input, processed)
 	if debounce then 
 		return
 	end
-	
+
+	localPlayer.ReplicationFocus = workspace
 	activateTools()
 end
 
@@ -65,19 +66,10 @@ if not getgenv().Network then
 	Network.RetainPart = function(Part)
 		if typeof(Part) == "Instance" and Part:IsA("BasePart") and Part:IsDescendantOf(workspace) then
 			table.insert(Network.BaseParts, Part)
-			Part.CustomPhysicalProperties = PhysicalProperties.new(0.0001, 0.0001, 0.0001, 0.0001, 0.0001)
+			Part.Massless = true
 			Part.CanCollide = false
 		end
 	end
-	
-	local function EnablePartControl()
-		localPlayer.ReplicationFocus = workspace
-		RunService.Heartbeat:Connect(function()
-			sethiddenproperty(localPlayer, "SimulationRadius", math.huge)
-		end)
-	end
-	
-	EnablePartControl()
 end
 
 local function onHeartbeat()
@@ -88,8 +80,8 @@ local function onHeartbeat()
 		if not child then
 			continue
 		end
-		
-                --local directionToTarget = (mousePosition - child.Position).unit
+
+		sethiddenproperty(localPlayer, "SimulationRadius", math.huge)
                 child.BodyPosition.Position = mousePosition
 	end
 end 
@@ -116,7 +108,7 @@ local function onChildAdded(child: Instance)
        		Torque.Torque = Vector3.new(100000, 100000, 100000)
 
 		local Attachment0 = Instance.new("Attachment", child)
-		local Attachment1 = Instance.new("Attachment", child)
+		local Attachment1 = localPlayer.Character.HumanoidRootPart.RootAttachment
 		
 		Torque.Attachment0 = Attachment0
 				
