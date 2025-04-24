@@ -111,7 +111,7 @@ local function onChildAdded(child: Instance)
 	bodyAngularVelocity.AngularVelocity = Vector3.new(100000000, 100000000, 100000000)    
 
 	local Attachment0 = Instance.new("Attachment", child)
-	local Attachment1 = localPlayer.Character.HumanoidRootPart.RootAttachment
+	local Attachment1 = Instance.new("Attachment", workspace.Terrain)
 
 	local AlignPosition = Instance.new("AlignPosition", child)
         AlignPosition.MaxForce = "inf"
