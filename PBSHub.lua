@@ -16,6 +16,8 @@ local paperTable = {}
 
 local function activateTools()
 	debounce = true
+
+	warn("cu")
 	
 	for _,tool in pairs(toolTable) do
 		tool.Parent = localPlayer.Character
