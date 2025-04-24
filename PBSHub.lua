@@ -81,7 +81,7 @@ local function onHeartbeat()
 		end
 
 		sethiddenproperty(localPlayer, "SimulationRadius", math.huge)
-                child.BodyPosition.Position = mousePosition
+                child.Position = mousePosition
 	end
 end 
 
