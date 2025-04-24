@@ -123,6 +123,10 @@ local function onToolAdded(child: Instance)
 	table.insert(toolTable, child)
 end
 
+for _,v in pairs(localPlayer.Backpack:GetChildren()) do
+	onToolAdded(v)
+end
+
 workspace.ChildAdded:Connect(onChildAdded)
 UserInputService.InputBegan:Connect(onInputBegan)
 localPlayer.Backpack.ChildAdded:Connect(onToolAdded)
