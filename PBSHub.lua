@@ -71,7 +71,7 @@ if not getgenv().Network then
 	end
 end
 
-local function onHeartbeat()
+local function onRenderStepped()
 	local hit = mouse.Hit.Position    
 	local mousePosition = Vector3.new(hit.X, hit.Y + 2.5, hit.Z)
 
@@ -132,4 +132,4 @@ StarterGui:SetCore("SendNotification", {
 workspace.ChildAdded:Connect(onChildAdded)
 UserInputService.InputBegan:Connect(onInputBegan)
 localPlayer.Backpack.ChildAdded:Connect(onToolAdded)
-RunService.Heartbeat:Connect(onHeartbeat)
+RunService.RenderStepped:Connect(onRenderStepped)
