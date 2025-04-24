@@ -98,8 +98,7 @@ local function onChildAdded(child: Instance)
 	child.CanCollide = false
 	child.CanQuery = false
 	child.CanTouch = false
-	--child.CustomPhysicalProperties = PhysicalProperties.new(0.0001, 0.0001, 0.0001, 0.0001, 0.0001)
-
+	
 	local bodyAngularVelocity = Instance.new("BodyAngularVelocity", child)    
 	bodyAngularVelocity.P = "inf"
 	bodyAngularVelocity.MaxTorque = Vector3.new("inf", "inf", "inf")
@@ -108,14 +107,12 @@ local function onChildAdded(child: Instance)
 	local Attachment0 = Instance.new("Attachment", child)
 	local Attachment1 = localPlayer.Character.HumanoidRootPart.RootAttachment
 
-	--[[
-	local AlignPosition = Instance.new("AlignPosition")
+	local AlignPosition = Instance.new("AlignPosition", child)
         AlignPosition.MaxForce = "inf"
         AlignPosition.MaxVelocity = math.huge
         AlignPosition.Responsiveness = 200
         AlignPosition.Attachment0 = Attachment1
        	AlignPosition.Attachment1 = Attachment0
-	]]--
 		
 	table.insert(paperTable, child)
 end
