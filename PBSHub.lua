@@ -98,7 +98,7 @@ local function onChildAdded(child: Instance)
 	child.CanCollide = false
 	child.CanQuery = false
 	child.CanTouch = false
-	child.Massless = true
+	child.CustomPhysicalProperties = PhysicalProperties.new(0.0001, 0.0001, 0.0001, 0.0001, 0.0001)
 		
 	local bodyPosition = Instance.new("BodyPosition", child)    
 	bodyPosition.D = 500
