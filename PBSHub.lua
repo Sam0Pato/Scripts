@@ -16,13 +16,14 @@ local paperTable = {}
 
 local function activateTools()
 	debounce = true
-	
-	for _,tool in pairs(toolTable) do
-		coroutine.wrap(function()
-			tool.Parent = localPlayer.Character
+		
+	for _, tool in ipairs(toolTable) do
+		tool.Parent = speaker.Character
+		
+		task.spawn(function()
 			tool:Activate()
-			tool.Parent = localPlayer.Backpack
-		end)()
+			tool.Parent = Backpack
+		end)
 	end
 	
 	task.wait(0.75)
