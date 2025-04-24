@@ -8,7 +8,6 @@ local localPlayer = game:GetService("Players").LocalPlayer
 local mouse = localPlayer:GetMouse()
 
 local debounce = false
-local toolTable = {}
 local paperTable = {}
 
 
@@ -16,8 +15,14 @@ local paperTable = {}
 
 local function activateTools()
 	debounce = true
+
+	local backpack = localPlayer.Backpack
+	
+	for _, tool in ipairs(backpack:GetChildren()) do
+		if tool.Name ~= "TpRoll" then
+			continue
+		end
 		
-	for _, tool in ipairs(toolTable) do
 		tool.Parent = speaker.Character
 		
 		task.spawn(function()
@@ -116,22 +121,6 @@ local function onChildAdded(child: Instance)
 		
 		table.insert(paperTable, child)
 	end
-end
-
-local function onToolAdded(child: Instance)
-	if not child:IsA("Tool") then
-		return
-	end
-	
-	if child.Name ~= "TpRoll" then
-		return
-	end
-	
-	table.insert(toolTable, child)
-end
-
-for _,v in pairs(localPlayer.Backpack:GetChildren()) do
-	onToolAdded(v)
 end
 
 workspace.ChildAdded:Connect(onChildAdded)
