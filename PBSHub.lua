@@ -74,9 +74,6 @@ if not getgenv().Network then
 		localPlayer.ReplicationFocus = workspace
 		RunService.Heartbeat:Connect(function()
 			sethiddenproperty(localPlayer, "SimulationRadius", math.huge)
-			for _, Part in pairs(paperTable) do
-				Part.Velocity = Network.Velocity
-			end
 		end)
 	end
 	
