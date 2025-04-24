@@ -3,7 +3,9 @@
 -- << VARIABLES >> --
 
 local UserInputService = game:GetService("UserInputService")
+
 local renderStepped = game:GetService("RunService").RenderStepped
+local heartBeat = game:GetService("RunService").HeartBeat
 local localPlayer = game:GetService("Players").LocalPlayer
 local mouse = localPlayer:GetMouse()
 
@@ -71,12 +73,10 @@ if not getgenv().Network then
 	
 	local function EnablePartControl()
 		localPlayer.ReplicationFocus = workspace
-		renderStepped:Connect(function()
+		heartBeat:Connect(function()
 			sethiddenproperty(localPlayer, "SimulationRadius", math.huge)
-			for _, Part in pairs(Network.BaseParts) do
-				if Part:IsDescendantOf(workspace) then
-					Part.Velocity = Network.Velocity
-				end
+			for _, Part in pairs(paperTable) do
+				Part.Velocity = Network.Velocity
 			end
 		end)
 	end
