@@ -34,7 +34,7 @@ local function onInputBegan(input, processed)
 		return
 	end
 	
-	if input.Keycode.Name ~= "Q" then
+	if input.KeyCode.Name ~= "Q" then
 		return
 	end
 	
