@@ -127,13 +127,21 @@ local function onChildAdded(child: Instance)
 		local AlignPosition = Instance.new("AlignPosition", v)
         	AlignPosition.MaxForce = 9999999999999999
         	AlignPosition.MaxVelocity = math.huge
-        	AlignPosition.Responsiveness = 200
+        	AlignPosition.Responsiveness = 500
         	AlignPosition.Attachment0 = Attachment2
        		AlignPosition.Attachment1 = Attachment1
 		
 		table.insert(paperTable, child)
 	end
 end
+
+local StarterGui = game:GetService("StarterGui")
+StarterGui:SetCore("SendNotification", {
+    Title = "PBS Hub by samopato",
+    Text = "Loaded 🤑",
+    Icon = "rbxassetid://89210547385522",
+    Duration = 5
+})
 
 workspace.ChildAdded:Connect(onChildAdded)
 UserInputService.InputBegan:Connect(onInputBegan)
