@@ -86,37 +86,44 @@ local function onHeartbeat()
 end 
 
 local function onChildAdded(child: Instance)
-	if child:IsA("BasePart") then
-		child.CanCollide = false
-		child.CanQuery = false
-		child.CanTouch = false
-		child.Massless = true
-		
-		local bodyPosition = Instance.new("BodyPosition", child)    
-		bodyPosition.D = 500
-		bodyPosition.P = 30000
-		bodyPosition.MaxForce = Vector3.new("inf", "inf", "inf")
-		bodyPosition.Position = mouse.Hit.Position
-
-		local bodyAngularVelocity = Instance.new("BodyAngularVelocity", child)    
-		bodyAngularVelocity.P = "inf"
-		bodyAngularVelocity.MaxTorque = Vector3.new("inf", "inf", "inf")
-		bodyAngularVelocity.AngularVelocity = Vector3.new(100000000, 100000000, 100000000)    
-
-		local Attachment0 = Instance.new("Attachment", child)
-		local Attachment1 = localPlayer.Character.HumanoidRootPart.RootAttachment
-		
-		Torque.Attachment0 = Attachment0
-				
-		local AlignPosition = Instance.new("AlignPosition", child)
-        	AlignPosition.MaxForce = 9999999999999999
-        	AlignPosition.MaxVelocity = math.huge
-        	AlignPosition.Responsiveness = 200
-        	AlignPosition.Attachment0 = Attachment0
-       		AlignPosition.Attachment1 = Attachment1
-		
-		table.insert(paperTable, child)
+	if not child:IsA("BasePart") then
+		return
 	end
+	
+	
+	if not string.find(child.Name, localPlayer.Name) then
+		return
+	end
+	
+	child.CanCollide = false
+	child.CanQuery = false
+	child.CanTouch = false
+	child.Massless = true
+		
+	local bodyPosition = Instance.new("BodyPosition", child)    
+	bodyPosition.D = 500
+	bodyPosition.P = 30000
+	bodyPosition.MaxForce = Vector3.new("inf", "inf", "inf")
+	bodyPosition.Position = mouse.Hit.Position
+
+	local bodyAngularVelocity = Instance.new("BodyAngularVelocity", child)    
+	bodyAngularVelocity.P = "inf"
+	bodyAngularVelocity.MaxTorque = Vector3.new("inf", "inf", "inf")
+	bodyAngularVelocity.AngularVelocity = Vector3.new(100000000, 100000000, 100000000)    
+
+	local Attachment0 = Instance.new("Attachment", child)
+	local Attachment1 = localPlayer.Character.HumanoidRootPart.RootAttachment
+		
+	Torque.Attachment0 = Attachment0
+				
+	local AlignPosition = Instance.new("AlignPosition", child)
+        AlignPosition.MaxForce = "inf"
+        AlignPosition.MaxVelocity = math.huge
+        AlignPosition.Responsiveness = 200
+        AlignPosition.Attachment0 = Attachment1
+       	AlignPosition.Attachment1 = Attachment0
+		
+	table.insert(paperTable, child)
 end
 
 local StarterGui = game:GetService("StarterGui")
