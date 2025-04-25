@@ -104,31 +104,24 @@ local function makeWall(desiredCols, desiredRows)
 	end
 
 	local startPos = mouse.Hit.Position
-
-	local cam = workspace.CurrentCamera
-	local forward = cam.CFrame.LookVector.Unit
-	local upCam = cam.CFrame.UpVector.Unit
-	
-	local right = upCam:Cross(forward).Unit
-	local upPlane = forward:Cross(right).Unit
-
 	local panel = paperTable[1]
 	local halfW, halfH = panel.Size.X/2, panel.Size.Z/2
 
 	local cols = desiredCols or math.ceil(math.sqrt(totalParts))
 	local rows = desiredRows or math.ceil(totalParts/cols)
 
-	local origin = startPos + right * halfW + upPlane * halfH
+	local origin = startPos * halfW * halfH
 
 	for i = 1, totalParts do
 		local col = (i-1) // rows
 		local row = (i-1) % rows
 
 		local part = paperTable[i]
-		local worldOffset = right * (col * panel.Size.X) + upPlane * (row * panel.Size.Z)
+		local worldOffset = (col * panel.Size.X) * (row * panel.Size.Z)
 		local pos = origin + worldOffset
 
-		part.CFrame   = CFrame.fromMatrix(pos, right, upPlane, -forward)
+		part.Position = pos
+		task.wait(0.1)
 		part.Anchored = true
 	end
 end
