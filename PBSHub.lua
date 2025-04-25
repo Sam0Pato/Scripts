@@ -93,12 +93,34 @@ local function activateTools()
 	debounce = false
 end
 
+local function getAttachmentBase()
+	local existing = workspace:FindFirstChild("WallAttachmentBase")
+	if existing then return existing end
 
-local function createAlignConstraint(part: BasePart, targetPos: Vector3, targetRot: CFrame)
+	local base = Instance.new("Part")
+	base.Name = "WallAttachmentBase"
+	base.Anchored = true
+	base.CanCollide = false
+	base.Transparency = 1
+	base.Size = Vector3.new(1, 1, 1)
+	base.CFrame = CFrame.new(0, -1000, 0) -- hide it far underground
+	base.Parent = workspace
+	return base
+end
+
+local function createAlignConstraint(part: BasePart, targetPos: Vector3, targetRot: CFrame, base)
+	-- Clear old constraints
+	for _, c in ipairs(part:GetChildren()) do
+		if c:IsA("AlignPosition") or c:IsA("AlignOrientation") or c:IsA("Attachment") then
+			c:Destroy()
+		end
+	end
+
+	-- Position
 	local att0 = Instance.new("Attachment", part)
 	local att1 = Instance.new("Attachment")
 	att1.WorldPosition = targetPos
-	att1.Parent = workspace.Terrain
+	att1.Parent = base
 
 	local alignPos = Instance.new("AlignPosition")
 	alignPos.Attachment0 = att0
@@ -111,9 +133,8 @@ local function createAlignConstraint(part: BasePart, targetPos: Vector3, targetR
 	-- Orientation
 	local attRot0 = Instance.new("Attachment", part)
 	local attRot1 = Instance.new("Attachment")
-	attRot1.CFrame = targetRot
 	attRot1.WorldCFrame = targetRot
-	attRot1.Parent = workspace.Terrain
+	attRot1.Parent = base
 
 	local alignRot = Instance.new("AlignOrientation")
 	alignRot.Attachment0 = attRot0
@@ -126,12 +147,11 @@ end
 
 local function makeWall(desiredCols, desiredRows)
 	local totalParts = #paperTable
+	
 	if totalParts == 0 then
-		warn("No parts in the paperTable!")
 		return
 	end
 
-	-- Wait for mouse hit
 	while not mouse.Hit or not mouse.Hit.Position do
 		RunService.Heartbeat:Wait()
 	end
