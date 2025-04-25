@@ -26,7 +26,6 @@ if _G.PBSHub then
 	  	Duration = 5
 	})
 else
-
 	StarterGui:SetCore("SendNotification", {
 	   	Title = "PBS Hub by samopato",
  	 	Text = "Loaded 👅👅👅",
@@ -95,43 +94,44 @@ local function activateTools()
 	debounce = false
 end
 
-local function makeWall()
+local function makeWall(desiredCols, desiredRows)
     activateTools()
+    task.wait(0.5)
 
-		task.wait(0.5)
+    local totalParts = #paperTable
+    if totalParts == 0 then
+        return
+    end
 
-		if #paperTable < 1 then
-			return
-		end
+    local startPos = mouse.Hit.Position
 
-	
+    local cam = workspace.CurrentCamera
+    local forward = cam.CFrame.LookVector.Unit
+    local upCam   = cam.CFrame.UpVector.Unit
 
-    local startPosition = mouse.Hit.Position
-    local paperSize = paperTable[1].Size
-    local wallSizeX = math.round(#paperTable / 2)
-    local wallSizeY = wallSizeX
+		local right   = upCam:Cross(forward).Unit
+    local upPlane = forward:Cross(right).Unit
 
-    for col = 1, wallSizeX do
-        for row = 1, wallSizeY do
-            local index = (col - 1) * wallSizeY + row
-			
-            if index > totalParts then
-							break
-						end
+    local panel = paperTable[1]
+    local halfW, halfH = panel.Size.X/2, panel.Size.Z/2
 
-            local part = paperTable[index]
-			
-            local xOffset = (col - 1) * paperSize.X
-            local yOffset = (row - 1) * paperSize.Z
-            
-            yOffset += paperSize.Z / 2
+    local cols = desiredCols or math.ceil(math.sqrt(totalParts))
+    local rows = desiredRows or math.ceil(totalParts/cols)
 
-            part.CFrame = CFrame.new(startPosition + Vector3.new(xOffset, yOffset, 0)) * CFrame.Angles(math.rad(90), 0, 0)
-            part.Anchored = true
-        end
+    local origin = startPos + right * halfW + upPlane * halfH
+
+    for i = 1, totalParts do
+        local col = (i-1) // rows
+        local row = (i-1) % rows
+
+        local part = paperTable[i]
+        local worldOffset = right * (col * panel.Size.X) + upPlane * (row * panel.Size.Z)
+				local pos = origin + worldOffset
+
+        part.CFrame   = CFrame.fromMatrix(pos, right, upPlane, -forward)
+        part.Anchored = true
     end
 end
-
 
 local function onInputBegan(input, processed)
 	if processed then
