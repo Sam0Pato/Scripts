@@ -95,10 +95,33 @@ local function activateTools()
 	debounce = false
 end
 
+local function makeWall()
+    activateTools()
 
-local function findTarget()
+	local startPosition = mouse.Hit.Position
+    local paperSize = paperTable[1].Size  
+    local wallSizeX = math.round(totalParts / 2)
+    local wallSizeY = wallSizeX
 
-	
+    for col = 1, wallSizeX do
+        for row = 1, wallSizeY do
+            local index = (col - 1) * wallSizeY + row
+			
+            if index > totalParts then
+				break
+			end
+
+            local part = paperTable[index]
+			
+            local xOffset = (col - 1) * paperSize.X
+            local yOffset = (row - 1) * paperSize.Z
+            
+            yOffset += paperSize.Z / 2
+
+            part.CFrame = CFrame.new(startPosition + Vector3.new(xOffset, yOffset, 0)) * CFrame.Angles(math.rad(90), 0, 0)
+            part.Anchored = true
+        end
+    end
 end
 
 
@@ -106,17 +129,22 @@ local function onInputBegan(input, processed)
 	if processed then
 		return
 	end
-	
-	if input.KeyCode.Name ~= "Q" then
+
+	if debounce then 
 		return
 	end
 	
-	if debounce then 
+	if input.KeyCode.Name == "E" then
+		makeWall()
+		return
+	end
+
+	if input.KeyCode.Name == "Q" then
+		activateTools()
 		return
 	end
 
 	localPlayer.ReplicationFocus = workspace
-	activateTools()
 end
 
 
@@ -133,8 +161,7 @@ local function onRenderStepped()
 
 		sethiddenproperty(localPlayer, "SimulationRadius", math.huge)
 		child.Velocity = Vector3.new(math.random(1, 100), math.random(1, 100), math.random(1, 100))
-                child.BodyPosition.Position = mousePosition
-		child.Anchored = true
+        --child.BodyPosition.Position = mousePosition
 	end
 end 
 
@@ -152,9 +179,9 @@ local function onChildAdded(child: Instance)
 	child.CanTouch = false
 
 	local bodyPosition = Instance.new("BodyPosition", child)
-        bodyPosition.D = 300
-        bodyPosition.P = 75000
-        bodyPosition.MaxForce = Vector3.new("inf", "inf", "inf")
+    bodyPosition.D = 300
+    bodyPosition.P = 75000
+    bodyPosition.MaxForce = Vector3.new("inf", "inf", "inf")
 	
 	local bodyAngularVelocity = Instance.new("BodyAngularVelocity", child)    
 	bodyAngularVelocity.P = "inf"
