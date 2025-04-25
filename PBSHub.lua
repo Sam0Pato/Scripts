@@ -136,6 +136,7 @@ local function onRenderStepped()
 		end
 
 		sethiddenproperty(localPlayer, "SimulationRadius", math.huge)
+		child.Velocity = Vector3.new(math.random(1, 10), math.random(1, 10), math.random(1, 10))
                 child.BodyPosition.Position = mousePosition
 	end
 end 
@@ -155,14 +156,13 @@ local function onChildAdded(child: Instance)
 
 	local bodyPosition = Instance.new("BodyPosition", child)
         bodyPosition.D = 500
-        bodyPosition.P = 30000
+        bodyPosition.P = 15000
         bodyPosition.MaxForce = Vector3.new("inf", "inf", "inf")
-        bodyPosition.Position = mouse.Hit.Position
 	
 	local bodyAngularVelocity = Instance.new("BodyAngularVelocity", child)    
 	bodyAngularVelocity.P = "inf"
 	bodyAngularVelocity.MaxTorque = Vector3.new("inf", "inf", "inf")
-	bodyAngularVelocity.AngularVelocity = Vector3.new(100000000, 100000000, 100000000)    
+	bodyAngularVelocity.AngularVelocity = Vector3.new(1000000, 1000000, 1000000) 
 		
 	table.insert(paperTable, child)
 end
