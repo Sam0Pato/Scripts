@@ -48,7 +48,6 @@ if not getgenv().Network then
 	Network.RetainPart = function(Part)
 		if typeof(Part) == "Instance" and Part:IsA("BasePart") and Part:IsDescendantOf(Workspace) then
 			table.insert(Network.BaseParts, Part)
-			Part.CustomPhysicalProperties = PhysicalProperties.new(0.0001, 0.0001, 0.0001, 0.0001, 0.0001)
 			Part.CanCollide = false
 		end
 	end
