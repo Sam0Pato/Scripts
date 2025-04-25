@@ -12,7 +12,10 @@ local mouse = localPlayer:GetMouse()
 local debounce = false
 local paperTable = {}
 
-local mouseAttachment = workspace.Terrain:FindFirstChild("Target") or Instance.new("Attachment", workspace.Terrain)
+local mouseAttachment = workspace.Terrain:FindFirstChild("Target")
+if not mouseAttachment then
+	mouseAttachment = Instance.new("Attachment", workspace.Terrain)
+end
 mouseAttachment.Name = "Target"
 mouseAttachment.Visible = true
 
