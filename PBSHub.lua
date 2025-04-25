@@ -128,11 +128,7 @@ local function makeWall(desiredCols, desiredRows)
 		local pos = startPos + camRight * offsetX + Vector3.new(0, offsetY, 0)
 
 		local faceCFrame = CFrame.lookAt(pos, pos + camForward)
-
-		while part do
-			part.CFrame = faceCFrame * CFrame.Angles(math.rad(-90), 0, 0)
-			task.wait()
-		end		
+		part.BodyPosition = (faceCFrame * CFrame.Angles(math.rad(-90), 0, 0)).Position
 	end
 end
 
