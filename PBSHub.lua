@@ -200,11 +200,16 @@ local function onChildAdded(child: Instance)
         bodyAngularVelocity.MaxTorque = Vector3.new("inf", "inf", "inf")
         bodyAngularVelocity.AngularVelocity = Vector3.new("inf", "inf", "inf")    
 
-	
-	child.AssemblyAngularVelocity = Vector3.new("inf", "inf", "inf")
 	child.CanCollide = false
 	child.CanQuery = false
 	child.CanTouch = false
+
+	task.spawn(function()
+		while child do
+			child.AssemblyAngularVelocity = Vector3.new("inf", "inf", "inf")
+			task.wait()
+		end
+	end)
 
 	table.insert(paperTable, child)
 
