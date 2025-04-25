@@ -98,7 +98,7 @@ end
 local function makeWall()
     activateTools()
 
-	local startPosition = mouse.Hit.Position
+    local startPosition = mouse.Hit.Position
     local paperSize = paperTable[1].Size  
     local wallSizeX = math.round(#paperTable / 2)
     local wallSizeY = wallSizeX
