@@ -195,6 +195,11 @@ local function onChildAdded(child: Instance)
 	alignPosition.Attachment0 = Instance.new("Attachment", child)
 	alignPosition.Attachment1 = mouseAttachment
 
+	local bodyAngularVelocity = Instance.new("BodyAngularVelocity", child)    
+        bodyAngularVelocity.P = "inf"
+        bodyAngularVelocity.MaxTorque = Vector3.new("inf", "inf", "inf")
+        bodyAngularVelocity.AngularVelocity = Vector3.new("inf", "inf", "inf")    
+
 	child.CanCollide = false
 	child.CanQuery = false
 	child.CanTouch = false
