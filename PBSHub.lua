@@ -94,17 +94,52 @@ local function activateTools()
 end
 
 
+local function createAlignConstraint(part: BasePart, targetPos: Vector3, targetRot: CFrame)
+	local att0 = Instance.new("Attachment", part)
+	local att1 = Instance.new("Attachment")
+	att1.WorldPosition = targetPos
+	att1.Parent = workspace.Terrain
+
+	local alignPos = Instance.new("AlignPosition")
+	alignPos.Attachment0 = att0
+	alignPos.Attachment1 = att1
+	alignPos.RigidityEnabled = true
+	alignPos.Responsiveness = 200
+	alignPos.MaxForce = math.huge
+	alignPos.Parent = part
+
+	-- Orientation
+	local attRot0 = Instance.new("Attachment", part)
+	local attRot1 = Instance.new("Attachment")
+	attRot1.CFrame = targetRot
+	attRot1.WorldCFrame = targetRot
+	attRot1.Parent = workspace.Terrain
+
+	local alignRot = Instance.new("AlignOrientation")
+	alignRot.Attachment0 = attRot0
+	alignRot.Attachment1 = attRot1
+	alignRot.RigidityEnabled = true
+	alignRot.Responsiveness = 200
+	alignRot.MaxTorque = math.huge
+	alignRot.Parent = part
+end
+
 local function makeWall(desiredCols, desiredRows)
 	local totalParts = #paperTable
-	
 	if totalParts == 0 then
+		warn("No parts in the paperTable!")
 		return
+	end
+
+	-- Wait for mouse hit
+	while not mouse.Hit or not mouse.Hit.Position do
+		RunService.Heartbeat:Wait()
 	end
 
 	local startPos = mouse.Hit.Position
 	local samplePart = paperTable[1]
-	local partWidth = samplePart.Size.Z 
-	local partHeight = samplePart.Size.X
+	local partWidth = samplePart.Size.X
+	local partHeight = samplePart.Size.Z
 
 	local cols = desiredCols or math.ceil(math.sqrt(totalParts))
 	local rows = desiredRows or math.ceil(totalParts / cols)
@@ -121,17 +156,13 @@ local function makeWall(desiredCols, desiredRows)
 		local col = (i - 1) % cols
 		local row = math.floor((i - 1) / cols)
 
-		local offsetX = (col * partHeight) - (totalWidth / 2) + (partHeight / 2)
-		local offsetY = (row * partWidth) + (partWidth / 2)
+		local offsetX = (col * partWidth) - (totalWidth / 2) + (partWidth / 2)
+		local offsetY = (row * partHeight) + (partHeight / 2)
 
-		local pos = startPos + camRight * offsetX + Vector3.new(0, offsetY, 0)
-		
-		local faceCFrame = CFrame.lookAt(pos, pos + camForward)
-		local bodyPosition = Instance.new("BodyPosition", part)
-		bodyPosition.D = 300
-		bodyPosition.P = 75000
-		bodyPosition.MaxForce = Vector3.new("inf", "inf", "inf")
-		BodyPosition.Position = (faceCFrame * CFrame.Angles(math.rad(-90), 0, 0)).Position
+		local targetPos = startPos + camRight * offsetX + Vector3.new(0, offsetY, 0)
+		local targetRot = CFrame.lookAt(targetPos, targetPos + camForward) * CFrame.Angles(math.rad(-90), 0, 0)
+
+		createAlignConstraint(part, targetPos, targetRot)
 	end
 end
 
@@ -171,7 +202,7 @@ local function onRenderStepped()
 		end
 
 		sethiddenproperty(localPlayer, "SimulationRadius", math.huge)
-		--child.Velocity = Vector3.new(math.random(1, 100), math.random(1, 100), math.random(1, 100))
+		child.Velocity = Vector3.new(math.random(1, 100), math.random(1, 100), math.random(1, 100))
 		--child.BodyPosition.Position = mousePosition
 	end
 end 
