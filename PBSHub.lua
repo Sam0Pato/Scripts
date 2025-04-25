@@ -224,8 +224,7 @@ local function onRenderStepped()
 		end
 
 		sethiddenproperty(localPlayer, "SimulationRadius", math.huge)
-		child.Velocity = Vector3.new(math.random(1, 100), math.random(1, 100), math.random(1, 100))
-		--child.BodyPosition.Position = mousePosition
+		--child.Velocity = Vector3.new(math.random(1, 100), math.random(1, 100), math.random(1, 100))
 	end
 end 
 
@@ -241,22 +240,13 @@ local function onChildAdded(child: Instance)
 	child.CanCollide = false
 	child.CanQuery = false
 	child.CanTouch = false
-
-
-	--[[
-	local bodyAngularVelocity = Instance.new("BodyAngularVelocity", child)    
-	bodyAngularVelocity.P = "inf"
-	bodyAngularVelocity.MaxTorque = Vector3.new("inf", "inf", "inf")
-	bodyAngularVelocity.AngularVelocity = Vector3.new(0, "inf", 0) 
-	]]--
 	
-	local index = #paperTable + 1
-
+	table.insert(paperTable, child)
+	
+	local index = #paperTable
 	child.Destroying:Connect(function()
 		table.remove(paperTable, index)
 	end)
-
-	table.insert(paperTable, child)
 end
 
 table.insert(_G.PBSHub.Connections, workspace.ChildAdded:Connect(onChildAdded))
