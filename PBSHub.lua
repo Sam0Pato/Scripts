@@ -117,6 +117,8 @@ local function createAlignConstraint(part: BasePart, targetPos: Vector3, targetR
 	end
 
 	-- Position
+
+	--[[
 	local att0 = Instance.new("Attachment", part)
 	local att1 = Instance.new("Attachment")
 	att1.WorldPosition = targetPos
@@ -129,6 +131,7 @@ local function createAlignConstraint(part: BasePart, targetPos: Vector3, targetR
 	alignPos.Responsiveness = 100
 	alignPos.MaxForce = math.huge
 	alignPos.Parent = part
+	]]--
 
 	-- Orientation
 	local attRot0 = Instance.new("Attachment", part)
