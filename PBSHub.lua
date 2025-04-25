@@ -197,10 +197,12 @@ local function onChildAdded(child: Instance)
 	if not string.find(child.Name, localPlayer.Name) then
 		return
 	end
+
+	local attachment = Instance.new("Attachment", child)
 	
 	local alignPosition = Instance.new("AlignPosition", child)
 	alignPosition.Attachment1 = mouseAttachment
-	alignPosition.Attachment0 = Instance.new("Attachment", child)
+	alignPosition.Attachment0 = attachment
 	alignPosition.RigidityEnabled = true
 
 	warn("Created")
