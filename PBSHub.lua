@@ -96,48 +96,42 @@ end
 
 
 local function makeWall(desiredCols, desiredRows)
-    activateTools()
-    task.wait(0.5)
+	local totalParts = #paperTable
+	
+	if totalParts == 0 then
+		return
+	end
 
-    local totalParts = #paperTable
-    if totalParts == 0 then return end
+	local startPos = mouse.Hit.Position
+	local samplePart = paperTable[1]
+	local partWidth = samplePart.Size.Z 
+	local partHeight = samplePart.Size.X
 
-    -- determine cols & rows (or default to near-square)
-    local cols = desiredCols or math.ceil(math.sqrt(totalParts))
-    local rows = desiredRows or math.ceil(totalParts/cols)
-    cols = math.max(cols, 1)
-    rows = math.max(rows, 1)
+	local cols = desiredCols or math.ceil(math.sqrt(totalParts))
+	local rows = desiredRows or math.ceil(totalParts / cols)
 
-    -- size of one panel
-    local panel = paperTable[1]
-    local w, h = panel.Size.X, panel.Size.Y
+	local totalWidth = cols * partWidth
+	local totalHeight = rows * partHeight
 
-    -- full wall dimensions
-    local wallW, wallH = cols * w, rows * h
+	local camForward = (camera.CFrame.LookVector * Vector3.new(1, 0, 1)).Unit
+	local camRight = Vector3.new(-camForward.Z, 0, camForward.X).Unit
 
-    -- center point where the mouse is pointing
-    local hitPos = mouse.Hit.Position
+	for i = 1, totalParts do
+		local part = paperTable[i]
 
-    -- compute the bottom-left corner so the wall’s center = hitPos
-    local origin = Vector3.new(
-        hitPos.X - (wallW/2) + (w/2),  -- X-start
-        hitPos.Y - (wallH/2) + (h/2),  -- Y-start
-        hitPos.Z                         -- Z is depth
-    )
+		local col = (i - 1) % cols
+		local row = math.floor((i - 1) / cols)
 
-    -- lay out each part
-    for i = 1, math.min(totalParts, cols*rows) do
-        local idx   = i - 1
-        local col   = idx % cols
-        local row   = math.floor(idx / cols)
+		local offsetX = (col * partHeight) - (totalWidth / 2) + (partHeight / 2)
+		local offsetY = (row * partWidth) + (partWidth / 2)
 
-        local xOffset = col * w
-        local yOffset = row * h
+		local pos = startPos + camRight * offsetX + Vector3.new(0, offsetY, 0)
 
-        local part = paperTable[i]
-        part.Position = origin + Vector3.new(xOffset, yOffset, 0)
-        part.Anchored  = true
-    end
+		local faceCFrame = CFrame.lookAt(pos, pos + camForward)
+		part.CFrame = faceCFrame * CFrame.Angles(math.rad(-90), 0, 0)
+
+		part.Anchored = true
+	end
 end
 
 
