@@ -180,8 +180,10 @@ local function onRenderStepped()
 		sethiddenproperty(localPlayer, "SimulationRadius", math.huge)	
 
 		local hit = mouse.Hit
-		local position = Vector3.new(hit.X, hit.Y + 2.5, hit.Z)
-		mouseAttachment.Position = position
+		if hit then	
+			local position = Vector3.new(hit.X, hit.Y + 2.5, hit.Z)
+			mouseAttachment.Position = position
+		end
 	end
 end 
 
