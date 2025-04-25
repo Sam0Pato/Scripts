@@ -1,8 +1,8 @@
 
-
 -- << VARIABLES >> --
 
 local UserInputService = game:GetService("UserInputService")
+local StarterGui = game:GetService("StarterGui")
 local RunService = game:GetService("RunService")
 
 local localPlayer = game:GetService("Players").LocalPlayer
@@ -12,44 +12,33 @@ local debounce = false
 local paperTable = {}
 
 
--- << PART CLAIM >> --
+-- << LOADING >> --
 
-local Folder = Instance.new("Folder", Workspace)
-local Part = Instance.new("Part", Folder)
-local Attachment1 = Instance.new("Attachment", Part)
-Part.Anchored = true
-Part.CanCollide = false
-Part.Transparency = 1
+if _G.PBSHub then
+	for _, connection in pairs(_G.PBSHub.Connections) do	
+		connection:Disconnect()
+	end
 
-local function ForcePart(v)
-    if v:IsA("Part") and not v.Anchored and not v.Parent:FindFirstChild("Humanoid") and not v.Parent:FindFirstChild("Head") and v.Name ~= "Handle" then
-        for _, x in next, v:GetChildren() do
-            if x:IsA("BodyAngularVelocity") or x:IsA("BodyForce") or x:IsA("BodyGyro") or x:IsA("BodyPosition") or x:IsA("BodyThrust") or x:IsA("BodyVelocity") or x:IsA("RocketPropulsion") then
-                x:Destroy()
-            end
-        end
-        if v:FindFirstChild("Attachment") then
-            v:FindFirstChild("Attachment"):Destroy()
-        end
-        if v:FindFirstChild("AlignPosition") then
-            v:FindFirstChild("AlignPosition"):Destroy()
-        end
-        if v:FindFirstChild("Torque") then
-            v:FindFirstChild("Torque"):Destroy()
-        end
-        v.CanCollide = false
-        local Torque = Instance.new("Torque", v)
-        Torque.Torque = Vector3.new(100000, 100000, 100000)
-        local AlignPosition = Instance.new("AlignPosition", v)
-        local Attachment2 = Instance.new("Attachment", v)
-        Torque.Attachment0 = Attachment2
-        AlignPosition.MaxForce = 9999999999999999
-        AlignPosition.MaxVelocity = math.huge
-        AlignPosition.Responsiveness = 200
-        AlignPosition.Attachment0 = Attachment2
-        AlignPosition.Attachment1 = Attachment1
-    end
+	StarterGui:SetCore("SendNotification", {
+  	 	Title = "PBS Hub by samopato",
+	  	Text = "RELOADED ☑",
+	  	Icon = "rbxassetid://89210547385522",
+	  	Duration = 5
+	})
+else
+
+	StarterGui:SetCore("SendNotification", {
+	   	Title = "PBS Hub by samopato",
+ 	 	Text = "Loaded 👅👅👅",
+ 	 	Icon = "rbxassetid://89210547385522",
+	  	Duration = 3
+	})
+	
+	_G.PBSHub = { Connections = {} }
 end
+
+
+-- << PART CLAIM >> --
 
 if not getgenv().Network then
     getgenv().Network = {
@@ -167,15 +156,7 @@ local function onChildAdded(child: Instance)
 	table.insert(paperTable, child)
 end
 
-local StarterGui = game:GetService("StarterGui")
-StarterGui:SetCore("SendNotification", {
-    Title = "PBS Hub by samopato",
-    Text = "Loaded 👅👅👅",
-    Icon = "rbxassetid://89210547385522",
-    Duration = 5
-})
-
-workspace.ChildAdded:Connect(onChildAdded)
-UserInputService.InputBegan:Connect(onInputBegan)
-localPlayer.Backpack.ChildAdded:Connect(onToolAdded)
-RunService.RenderStepped:Connect(onRenderStepped)
+table.insert(_G.PBSHub.Connections, workspace.ChildAdded:Connect(onChildAdded))
+table.insert(_G.PBSHub.Connections, UserInputService.InputBegan:Connect(onInputBegan))
+table.insert(_G.PBSHub.Connections, localPlayer.Backpack.ChildAdded:Connect(onToolAdded))
+table.insert(_G.PBSHub.Connections, RunService.RenderStepped:Connect(onRenderStepped))
