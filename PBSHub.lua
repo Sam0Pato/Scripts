@@ -170,6 +170,8 @@ local function makeWall(desiredCols, desiredRows)
 	local camForward = (camera.CFrame.LookVector * Vector3.new(1, 0, 1)).Unit
 	local camRight = Vector3.new(-camForward.Z, 0, camForward.X).Unit
 
+	local base = getAttachmentBase()
+
 	for i = 1, totalParts do
 		local part = paperTable[i]
 
@@ -182,7 +184,7 @@ local function makeWall(desiredCols, desiredRows)
 		local targetPos = startPos + camRight * offsetX + Vector3.new(0, offsetY, 0)
 		local targetRot = CFrame.lookAt(targetPos, targetPos + camForward) * CFrame.Angles(math.rad(-90), 0, 0)
 
-		createAlignConstraint(part, targetPos, targetRot)
+		createAlignConstraint(part, targetPos, targetRot, base)
 	end
 end
 
