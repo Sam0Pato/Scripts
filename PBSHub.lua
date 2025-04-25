@@ -194,6 +194,8 @@ local function onChildAdded(child: Instance)
 	child.CanQuery = false
 	child.CanTouch = false
 
+	--[[
+	
 	local bodyPosition = Instance.new("BodyPosition", child)
 	bodyPosition.D = 300
 	bodyPosition.P = 75000
@@ -204,6 +206,8 @@ local function onChildAdded(child: Instance)
 	bodyAngularVelocity.MaxTorque = Vector3.new("inf", "inf", "inf")
 	bodyAngularVelocity.AngularVelocity = Vector3.new(0, "inf", 0) 
 
+	]]--
+	
 	local index = #paperTable + 1
 
 	child.Destroying:Connect(function()
