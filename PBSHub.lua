@@ -30,10 +30,11 @@ if not getgenv().Network then
 
     local function EnablePartControl()
         localPlayer.ReplicationFocus = workspace
+		
         RunService.Heartbeat:Connect(function()
             sethiddenproperty(localPlayer, "SimulationRadius", math.huge)
             for _, Part in pairs(Network.BaseParts) do
-                if Part:IsDescendantOf(Workspace) then
+                if Part:IsDescendantOf(workspace) then
                     Part.Velocity = Network.Velocity
                 end
             end
@@ -125,18 +126,6 @@ local function onChildAdded(child: Instance)
 	bodyAngularVelocity.P = "inf"
 	bodyAngularVelocity.MaxTorque = Vector3.new("inf", "inf", "inf")
 	bodyAngularVelocity.AngularVelocity = Vector3.new(100000000, 100000000, 100000000)    
-
-	--[[
-	local Attachment0 = Instance.new("Attachment", child)
-	local Attachment1 = Instance.new("Attachment", workspace.Terrain)
-
-	local AlignPosition = Instance.new("AlignPosition", child)
-        AlignPosition.MaxForce = "inf"
-        AlignPosition.MaxVelocity = math.huge
-        AlignPosition.Responsiveness = 200
-        AlignPosition.Attachment0 = Attachment0
-       	AlignPosition.Attachment1 = Attachment1
-	]]--
 		
 	table.insert(paperTable, child)
 end
