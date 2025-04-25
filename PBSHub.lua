@@ -115,7 +115,7 @@ local function makeWall(desiredCols, desiredRows)
 	local camForward = (camera.CFrame.LookVector * Vector3.new(1, 0, 1)).Unit
 	local camRight = Vector3.new(-camForward.Z, 0, camForward.X).Unit
 
-	for i = 1, totalParts do		
+	for i = 1, totalParts do
 		local part = paperTable[i]
 
 		local col = (i - 1) % cols
@@ -125,9 +125,13 @@ local function makeWall(desiredCols, desiredRows)
 		local offsetY = (row * partWidth) + (partWidth / 2)
 
 		local pos = startPos + camRight * offsetX + Vector3.new(0, offsetY, 0)
-
+		
 		local faceCFrame = CFrame.lookAt(pos, pos + camForward)
-		part.BodyPosition.Position = (faceCFrame * CFrame.Angles(math.rad(-90), 0, 0)).Position
+		local bodyPosition = Instance.new("BodyPosition", part)
+		bodyPosition.D = 300
+		bodyPosition.P = 75000
+		bodyPosition.MaxForce = Vector3.new("inf", "inf", "inf")
+		BodyPosition.Position = (faceCFrame * CFrame.Angles(math.rad(-90), 0, 0)).Position
 	end
 end
 
@@ -184,12 +188,6 @@ local function onChildAdded(child: Instance)
 	child.CanCollide = false
 	child.CanQuery = false
 	child.CanTouch = false
-
-
-	local bodyPosition = Instance.new("BodyPosition", child)
-	bodyPosition.D = 300
-	bodyPosition.P = 75000
-	bodyPosition.MaxForce = Vector3.new("inf", "inf", "inf")
 
 
 	--[[
