@@ -184,9 +184,9 @@ local function onChildAdded(child: Instance)
 		return
 	end
 
-	child.CanCollide = false
-	child.CanQuery = false
-	child.CanTouch = false
+	--child.CanCollide = false
+	--child.CanQuery = false
+	--child.CanTouch = false
 
 	--[[
 	
