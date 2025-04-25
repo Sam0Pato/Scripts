@@ -13,6 +13,7 @@ local debounce = false
 local paperTable = {}
 
 local mouseAttachment = Instance.new("Attachment", workspace.Terrain)
+mouseAttachment.Visible = true
 
 -- << LOADING >> --
 
