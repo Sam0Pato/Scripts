@@ -199,9 +199,11 @@ local function onChildAdded(child: Instance)
 	end
 	
 	local alignPosition = Instance.new("AlignPosition", child)
-	alignPosition.RigidityEnabled = true
-	alignPosition.Attachment0 = Instance.new("Attachment", child)
 	alignPosition.Attachment1 = mouseAttachment
+	alignPosition.Attachment0 = Instance.new("Attachment", child)
+	alignPosition.RigidityEnabled = true
+
+	warn("Created")
 
 	local bodyAngularVelocity = Instance.new("BodyAngularVelocity", child)    
         bodyAngularVelocity.P = "inf"
