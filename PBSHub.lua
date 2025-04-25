@@ -95,6 +95,13 @@ local function activateTools()
 	debounce = false
 end
 
+
+local function findTarget()
+
+	
+end
+
+
 local function onInputBegan(input, processed)
 	if processed then
 		return
@@ -127,6 +134,7 @@ local function onRenderStepped()
 		sethiddenproperty(localPlayer, "SimulationRadius", math.huge)
 		child.Velocity = Vector3.new(math.random(1, 100), math.random(1, 100), math.random(1, 100))
                 child.BodyPosition.Position = mousePosition
+		child.Anchored = true
 	end
 end 
 
