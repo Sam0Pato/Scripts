@@ -17,7 +17,7 @@ if not mouseAttachment then
 	mouseAttachment = Instance.new("Attachment", workspace.Terrain)
 end
 mouseAttachment.Name = "Target"
-mouseAttachment.Visible = true
+mouseAttachment.Visible = false
 
 -- << LOADING >> --
 
