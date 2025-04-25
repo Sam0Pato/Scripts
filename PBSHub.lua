@@ -210,13 +210,6 @@ local function onChildAdded(child: Instance)
 	child.CanQuery = false
 	child.CanTouch = false
 
-	task.spawn(function()
-		while child do
-			child.AssemblyAngularVelocity = Vector3.new("inf", "inf", "inf")
-			task.wait()
-		end
-	end)
-
 	table.insert(paperTable, child)
 
 	local index = #paperTable
