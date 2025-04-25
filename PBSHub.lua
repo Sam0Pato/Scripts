@@ -29,9 +29,9 @@ if not getgenv().Network then
     end
 
     local function EnablePartControl()
-        localPlayer.ReplicationFocus = Workspace
+        localPlayer.ReplicationFocus = workspace
         RunService.Heartbeat:Connect(function()
-            sethiddenproperty(LocalPlayer, "SimulationRadius", math.huge)
+            sethiddenproperty(localPlayer, "SimulationRadius", math.huge)
             for _, Part in pairs(Network.BaseParts) do
                 if Part:IsDescendantOf(Workspace) then
                     Part.Velocity = Network.Velocity
