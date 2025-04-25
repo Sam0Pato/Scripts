@@ -126,7 +126,7 @@ local function createAlignConstraint(part: BasePart, targetPos: Vector3, targetR
 	alignPos.Attachment0 = att0
 	alignPos.Attachment1 = att1
 	alignPos.RigidityEnabled = true
-	alignPos.Responsiveness = 200
+	alignPos.Responsiveness = 100
 	alignPos.MaxForce = math.huge
 	alignPos.Parent = part
 
