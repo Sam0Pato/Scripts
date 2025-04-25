@@ -128,7 +128,7 @@ local function makeWall(desiredCols, desiredRows)
 		local pos = startPos + camRight * offsetX + Vector3.new(0, offsetY, 0)
 
 		local faceCFrame = CFrame.lookAt(pos, pos + camForward)
-		part.BodyPosition = (faceCFrame * CFrame.Angles(math.rad(-90), 0, 0)).Position
+		part.BodyPosition.Position = (faceCFrame * CFrame.Angles(math.rad(-90), 0, 0)).Position
 	end
 end
 
@@ -182,9 +182,9 @@ local function onChildAdded(child: Instance)
 		return
 	end
 
-	--child.CanCollide = false
-	--child.CanQuery = false
-	--child.CanTouch = false
+	child.CanCollide = false
+	child.CanQuery = false
+	child.CanTouch = false
 
 
 	local bodyPosition = Instance.new("BodyPosition", child)
