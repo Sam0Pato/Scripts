@@ -156,7 +156,7 @@ local function onChildAdded(child: Instance)
 
 	local bodyPosition = Instance.new("BodyPosition", child)
         bodyPosition.D = 500
-        bodyPosition.P = 15000
+        bodyPosition.P = 75000
         bodyPosition.MaxForce = Vector3.new("inf", "inf", "inf")
 	
 	local bodyAngularVelocity = Instance.new("BodyAngularVelocity", child)    
