@@ -187,14 +187,20 @@ local function onChildAdded(child: Instance)
 	child.CanTouch = false
 
 	local bodyPosition = Instance.new("BodyPosition", child)
-    bodyPosition.D = 300
-    bodyPosition.P = 75000
-    bodyPosition.MaxForce = Vector3.new("inf", "inf", "inf")
+   	 bodyPosition.D = 300
+   	 bodyPosition.P = 75000
+  	  bodyPosition.MaxForce = Vector3.new("inf", "inf", "inf")
 	
 	local bodyAngularVelocity = Instance.new("BodyAngularVelocity", child)    
 	bodyAngularVelocity.P = "inf"
 	bodyAngularVelocity.MaxTorque = Vector3.new("inf", "inf", "inf")
 	bodyAngularVelocity.AngularVelocity = Vector3.new(0, "inf", 0) 
+
+	local index = #paperTable + 1
+	
+	child.Destroying:Connect(function()
+		table.Remove(paperTable, index)
+	end
 	
 	table.insert(paperTable, child)
 end
