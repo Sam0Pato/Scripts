@@ -155,7 +155,7 @@ local function onChildAdded(child: Instance)
 	child.CanTouch = false
 
 	local bodyPosition = Instance.new("BodyPosition", child)
-        bodyPosition.D = 5000
+        bodyPosition.D = 100
         bodyPosition.P = 75000
         bodyPosition.MaxForce = Vector3.new("inf", "inf", "inf")
 	
