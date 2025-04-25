@@ -96,48 +96,47 @@ end
 
 
 local function makeWall(desiredCols, desiredRows)
-    -- ensure tools are active
     activateTools()
     task.wait(0.5)
 
     local totalParts = #paperTable
     if totalParts == 0 then return end
 
-    -- how many cols/rows
+    -- determine cols & rows (or default to near-square)
     local cols = desiredCols or math.ceil(math.sqrt(totalParts))
     local rows = desiredRows or math.ceil(totalParts/cols)
     cols = math.max(cols, 1)
     rows = math.max(rows, 1)
 
-    -- reference part for size
+    -- size of one panel
     local panel = paperTable[1]
-    local sizeX, sizeY = panel.Size.X, panel.Size.Y
+    local w, h = panel.Size.X, panel.Size.Y
 
-    -- half-dimensions of the full grid
-    local halfWidth  = (cols * sizeX)  / 2
-    local halfHeight = (rows * sizeY)  / 2
+    -- full wall dimensions
+    local wallW, wallH = cols * w, rows * h
 
-    -- compute the bottom-left corner so that the grid’s center is at mouse.Hit
-    local centerPos = mouse.Hit.Position
-    local origin = centerPos
-        - Vector3.new(halfWidth  - sizeX/2,  -- x
-                      halfHeight - sizeY/2,  -- y
-                      0)                     -- z
+    -- center point where the mouse is pointing
+    local hitPos = mouse.Hit.Position
 
-    -- position each panel
-    for i, part in ipairs(paperTable) do
-        local idx = i - 1
-        local col = idx % cols
-        local row = math.floor(idx / cols)
+    -- compute the bottom-left corner so the wall’s center = hitPos
+    local origin = Vector3.new(
+        hitPos.X - (wallW/2) + (w/2),  -- X-start
+        hitPos.Y - (wallH/2) + (h/2),  -- Y-start
+        hitPos.Z                         -- Z is depth
+    )
 
-        local offset = Vector3.new(
-            col * sizeX,    -- across X for column
-            row * sizeY,    -- up Y for row
-            0
-        )
+    -- lay out each part
+    for i = 1, math.min(totalParts, cols*rows) do
+        local idx   = i - 1
+        local col   = idx % cols
+        local row   = math.floor(idx / cols)
 
-        part.Position = origin + offset
-        part.Anchored = true
+        local xOffset = col * w
+        local yOffset = row * h
+
+        local part = paperTable[i]
+        part.Position = origin + Vector3.new(xOffset, yOffset, 0)
+        part.Anchored  = true
     end
 end
 
