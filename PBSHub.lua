@@ -4,6 +4,7 @@
 local UserInputService = game:GetService("UserInputService")
 local StarterGui = game:GetService("StarterGui")
 local RunService = game:GetService("RunService")
+--local CoreGui = cloneref(game:GetService("CoreGui"))
 
 local localPlayer = game:GetService("Players").LocalPlayer
 local mouse = localPlayer:GetMouse()
@@ -11,6 +12,7 @@ local mouse = localPlayer:GetMouse()
 local debounce = false
 local paperTable = {}
 
+local mouseAttachment = Instance.new("Attachment", workspace.Terrain)
 
 -- << LOADING >> --
 
@@ -93,64 +95,10 @@ local function activateTools()
 	debounce = false
 end
 
-local function getAttachmentBase()
-	local existing = workspace:FindFirstChild("WallAttachmentBase")
-	if existing then return existing end
-
-	local base = Instance.new("Part")
-	base.Name = "WallAttachmentBase"
-	base.Anchored = true
-	base.CanCollide = false
-	base.Transparency = 1
-	base.Size = Vector3.new(1, 1, 1)
-	base.CFrame = CFrame.new(0, -1000, 0) -- hide it far underground
-	base.Parent = workspace
-	return base
-end
-
-local function createAlignConstraint(part: BasePart, targetPos: Vector3, targetRot: CFrame, base)
-	-- Clear old constraints
-	for _, c in ipairs(part:GetChildren()) do
-		if c:IsA("AlignPosition") or c:IsA("AlignOrientation") or c:IsA("Attachment") then
-			c:Destroy()
-		end
-	end
-
-	-- Position
-
-	--[[
-	local att0 = Instance.new("Attachment", part)
-	local att1 = Instance.new("Attachment")
-	att1.WorldPosition = targetPos
-	att1.Parent = base
-
-	local alignPos = Instance.new("AlignPosition")
-	alignPos.Attachment0 = att0
-	alignPos.Attachment1 = att1
-	alignPos.RigidityEnabled = true
-	alignPos.Responsiveness = 100
-	alignPos.MaxForce = math.huge
-	alignPos.Parent = part
-	]]--
-
-	-- Orientation
-	local attRot0 = Instance.new("Attachment", part)
-	local attRot1 = Instance.new("Attachment")
-	attRot1.WorldCFrame = targetRot
-	attRot1.Parent = base
-
-	local alignRot = Instance.new("AlignOrientation")
-	alignRot.Attachment0 = attRot0
-	alignRot.Attachment1 = attRot1
-	alignRot.RigidityEnabled = true
-	alignRot.Responsiveness = 200
-	alignRot.MaxTorque = math.huge
-	alignRot.Parent = part
-end
-
 local function makeWall(desiredCols, desiredRows)
+	--[[
 	local totalParts = #paperTable
-	
+
 	if totalParts == 0 then
 		return
 	end
@@ -189,6 +137,7 @@ local function makeWall(desiredCols, desiredRows)
 
 		createAlignConstraint(part, targetPos, targetRot, base)
 	end
+	--]]
 end
 
 
@@ -202,7 +151,7 @@ local function onInputBegan(input, processed)
 	end
 
 	if input.KeyCode.Name == "E" then
-		makeWall()
+		--makeWall()
 		return
 	end
 
@@ -227,7 +176,7 @@ local function onRenderStepped()
 		end
 
 		sethiddenproperty(localPlayer, "SimulationRadius", math.huge)
-		--child.Velocity = Vector3.new(math.random(1, 100), math.random(1, 100), math.random(1, 100))
+		mouseAttachment.Position = hit
 	end
 end 
 
@@ -239,13 +188,18 @@ local function onChildAdded(child: Instance)
 	if not string.find(child.Name, localPlayer.Name) then
 		return
 	end
+	
+	local alignPosition = Instance.new("AlignPosition", child)
+	alignPosition.RigidityEnabled = true
+	alignPosition.Attachment0 = Instance.new("Attachment", child)
+	alignPosition.Attachment1 = mouseAttachment
 
 	child.CanCollide = false
 	child.CanQuery = false
 	child.CanTouch = false
-	
+
 	table.insert(paperTable, child)
-	
+
 	local index = #paperTable
 	child.Destroying:Connect(function()
 		table.remove(paperTable, index)
@@ -254,5 +208,4 @@ end
 
 table.insert(_G.PBSHub.Connections, workspace.ChildAdded:Connect(onChildAdded))
 table.insert(_G.PBSHub.Connections, UserInputService.InputBegan:Connect(onInputBegan))
-table.insert(_G.PBSHub.Connections, localPlayer.Backpack.ChildAdded:Connect(onToolAdded))
 table.insert(_G.PBSHub.Connections, RunService.RenderStepped:Connect(onRenderStepped))
