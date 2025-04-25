@@ -20,19 +20,19 @@ if _G.PBSHub then
 	end
 
 	StarterGui:SetCore("SendNotification", {
-  	 	Title = "PBS Hub by samopato",
-	  	Text = "RELOADED ☑",
-	  	Icon = "rbxassetid://89210547385522",
-	  	Duration = 5
+		Title = "PBS Hub by samopato",
+		Text = "RELOADED ☑",
+		Icon = "rbxassetid://89210547385522",
+		Duration = 5
 	})
 else
 	StarterGui:SetCore("SendNotification", {
-	   	Title = "PBS Hub by samopato",
- 	 	Text = "Loaded 👅👅👅",
- 	 	Icon = "rbxassetid://89210547385522",
-	  	Duration = 3
+		Title = "PBS Hub by samopato",
+		Text = "Loaded 👅👅👅",
+		Icon = "rbxassetid://89210547385522",
+		Duration = 3
 	})
-	
+
 	_G.PBSHub = { Connections = {} }
 end
 
@@ -40,33 +40,33 @@ end
 -- << PART CLAIM >> --
 
 if not getgenv().Network then
-    getgenv().Network = {
-        BaseParts = {},
-        Velocity = Vector3.new(14.46262424, 14.46262424, 14.46262424)
-    }
+	getgenv().Network = {
+		BaseParts = {},
+		Velocity = Vector3.new(14.46262424, 14.46262424, 14.46262424)
+	}
 
-    Network.RetainPart = function(Part)
-        if typeof(Part) == "Instance" and Part:IsA("BasePart") and Part:IsDescendantOf(Workspace) then
-            table.insert(Network.BaseParts, Part)
-            Part.CustomPhysicalProperties = PhysicalProperties.new(0.0001, 0.0001, 0.0001, 0.0001, 0.0001)
-            Part.CanCollide = false
-        end
-    end
+	Network.RetainPart = function(Part)
+		if typeof(Part) == "Instance" and Part:IsA("BasePart") and Part:IsDescendantOf(Workspace) then
+			table.insert(Network.BaseParts, Part)
+			Part.CustomPhysicalProperties = PhysicalProperties.new(0.0001, 0.0001, 0.0001, 0.0001, 0.0001)
+			Part.CanCollide = false
+		end
+	end
 
-    local function EnablePartControl()
-        localPlayer.ReplicationFocus = workspace
-		
-        RunService.Heartbeat:Connect(function()
-            sethiddenproperty(localPlayer, "SimulationRadius", math.huge)
-            for _, Part in pairs(Network.BaseParts) do
-                if Part:IsDescendantOf(workspace) then
-                    Part.Velocity = Network.Velocity
-                end
-            end
-        end)
-    end
+	local function EnablePartControl()
+		localPlayer.ReplicationFocus = workspace
 
-    EnablePartControl()
+		RunService.Heartbeat:Connect(function()
+			sethiddenproperty(localPlayer, "SimulationRadius", math.huge)
+			for _, Part in pairs(Network.BaseParts) do
+				if Part:IsDescendantOf(workspace) then
+					Part.Velocity = Network.Velocity
+				end
+			end
+		end)
+	end
+
+	EnablePartControl()
 end
 
 
@@ -76,61 +76,61 @@ local function activateTools()
 	debounce = true
 
 	local backpack = localPlayer.Backpack
-	
+
 	for _, tool in ipairs(backpack:GetChildren()) do
 		if tool.Name ~= "TpRoll" then
 			continue
 		end
-		
+
 		tool.Parent = localPlayer.Character	
 		task.spawn(function()
 			tool:Activate()
 			tool.Parent = backpack
 		end)
 	end
-	
+
 	task.wait(1)
-	
+
 	debounce = false
 end
 
 local function makeWall(desiredCols, desiredRows)
-    activateTools()
-    task.wait(0.5)
+	activateTools()
+	task.wait(0.5)
 
-    local totalParts = #paperTable
-    if totalParts == 0 then
-        return
-    end
+	local totalParts = #paperTable
+	if totalParts == 0 then
+		return
+	end
 
-    local startPos = mouse.Hit.Position
+	local startPos = mouse.Hit.Position
 
-    local cam = workspace.CurrentCamera
-    local forward = cam.CFrame.LookVector.Unit
-    local upCam   = cam.CFrame.UpVector.Unit
+	local cam = workspace.CurrentCamera
+	local forward = cam.CFrame.LookVector.Unit
+	local upCam = cam.CFrame.UpVector.Unit
+	
+	local right = upCam:Cross(forward).Unit
+	local upPlane = forward:Cross(right).Unit
 
-		local right   = upCam:Cross(forward).Unit
-    local upPlane = forward:Cross(right).Unit
+	local panel = paperTable[1]
+	local halfW, halfH = panel.Size.X/2, panel.Size.Z/2
 
-    local panel = paperTable[1]
-    local halfW, halfH = panel.Size.X/2, panel.Size.Z/2
+	local cols = desiredCols or math.ceil(math.sqrt(totalParts))
+	local rows = desiredRows or math.ceil(totalParts/cols)
 
-    local cols = desiredCols or math.ceil(math.sqrt(totalParts))
-    local rows = desiredRows or math.ceil(totalParts/cols)
+	local origin = startPos + right * halfW + upPlane * halfH
 
-    local origin = startPos + right * halfW + upPlane * halfH
+	for i = 1, totalParts do
+		local col = (i-1) // rows
+		local row = (i-1) % rows
 
-    for i = 1, totalParts do
-        local col = (i-1) // rows
-        local row = (i-1) % rows
+		local part = paperTable[i]
+		local worldOffset = right * (col * panel.Size.X) + upPlane * (row * panel.Size.Z)
+		local pos = origin + worldOffset
 
-        local part = paperTable[i]
-        local worldOffset = right * (col * panel.Size.X) + upPlane * (row * panel.Size.Z)
-				local pos = origin + worldOffset
-
-        part.CFrame   = CFrame.fromMatrix(pos, right, upPlane, -forward)
-        part.Anchored = true
-    end
+		part.CFrame   = CFrame.fromMatrix(pos, right, upPlane, -forward)
+		part.Anchored = true
+	end
 end
 
 local function onInputBegan(input, processed)
@@ -141,7 +141,7 @@ local function onInputBegan(input, processed)
 	if debounce then 
 		return
 	end
-	
+
 	if input.KeyCode.Name == "E" then
 		makeWall()
 		return
@@ -169,7 +169,7 @@ local function onRenderStepped()
 
 		sethiddenproperty(localPlayer, "SimulationRadius", math.huge)
 		--child.Velocity = Vector3.new(math.random(1, 100), math.random(1, 100), math.random(1, 100))
-        --child.BodyPosition.Position = mousePosition
+		--child.BodyPosition.Position = mousePosition
 	end
 end 
 
@@ -177,31 +177,31 @@ local function onChildAdded(child: Instance)
 	if not child:IsA("BasePart") then
 		return
 	end
-	
+
 	if not string.find(child.Name, localPlayer.Name) then
 		return
 	end
-	
+
 	child.CanCollide = false
 	child.CanQuery = false
 	child.CanTouch = false
 
 	local bodyPosition = Instance.new("BodyPosition", child)
-   	 bodyPosition.D = 300
-   	 bodyPosition.P = 75000
-  	  bodyPosition.MaxForce = Vector3.new("inf", "inf", "inf")
-	
+	bodyPosition.D = 300
+	bodyPosition.P = 75000
+	bodyPosition.MaxForce = Vector3.new("inf", "inf", "inf")
+
 	local bodyAngularVelocity = Instance.new("BodyAngularVelocity", child)    
 	bodyAngularVelocity.P = "inf"
 	bodyAngularVelocity.MaxTorque = Vector3.new("inf", "inf", "inf")
 	bodyAngularVelocity.AngularVelocity = Vector3.new(0, "inf", 0) 
 
 	local index = #paperTable + 1
-	
+
 	child.Destroying:Connect(function()
-		table.Remove(paperTable, index)
-	end
-	
+		table.remove(paperTable, index)
+	end)
+
 	table.insert(paperTable, child)
 end
 
