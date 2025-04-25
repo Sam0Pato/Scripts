@@ -175,9 +175,8 @@ local function onRenderStepped()
 			continue
 		end
 
-		sethiddenproperty(localPlayer, "SimulationRadius", math.huge)
-		
-		mouseAttachment.Position = mousePosition 
+		sethiddenproperty(localPlayer, "SimulationRadius", math.huge)		
+		mouseAttachment.Position = mousePosition
 	end
 end 
 
