@@ -94,38 +94,53 @@ local function activateTools()
 	debounce = false
 end
 
+
 local function makeWall(desiredCols, desiredRows)
-	activateTools()
-	task.wait(0.5)
+    -- ensure tools are active
+    activateTools()
+    task.wait(0.5)
 
-	local totalParts = #paperTable
-	if totalParts == 0 then
-		return
-	end
+    local totalParts = #paperTable
+    if totalParts == 0 then return end
 
-	local startPos = mouse.Hit.Position
-	local panel = paperTable[1]
-	local halfW, halfH = panel.Size.X/2, panel.Size.Z/2
+    -- how many cols/rows
+    local cols = desiredCols or math.ceil(math.sqrt(totalParts))
+    local rows = desiredRows or math.ceil(totalParts/cols)
+    cols = math.max(cols, 1)
+    rows = math.max(rows, 1)
 
-	local cols = desiredCols or math.ceil(math.sqrt(totalParts))
-	local rows = desiredRows or math.ceil(totalParts/cols)
+    -- reference part for size
+    local panel = paperTable[1]
+    local sizeX, sizeY = panel.Size.X, panel.Size.Y
 
-	local origin = startPos * halfW * halfH
+    -- half-dimensions of the full grid
+    local halfWidth  = (cols * sizeX)  / 2
+    local halfHeight = (rows * sizeY)  / 2
 
-	for i = 1, totalParts do
-		local col = (i-1) // rows
-		local row = (i-1) % rows
+    -- compute the bottom-left corner so that the grid’s center is at mouse.Hit
+    local centerPos = mouse.Hit.Position
+    local origin = centerPos
+        - Vector3.new(halfWidth  - sizeX/2,  -- x
+                      halfHeight - sizeY/2,  -- y
+                      0)                     -- z
 
-		local part = paperTable[i]
-		local worldOffset = (col * panel.Size.X) * (row * panel.Size.Z)
-		local pos = origin
-		pos.Y += worldOffset
+    -- position each panel
+    for i, part in ipairs(paperTable) do
+        local idx = i - 1
+        local col = idx % cols
+        local row = math.floor(idx / cols)
 
-		part.Position = pos
-		task.wait(0.1)
-		part.Anchored = true
-	end
+        local offset = Vector3.new(
+            col * sizeX,    -- across X for column
+            row * sizeY,    -- up Y for row
+            0
+        )
+
+        part.Position = origin + offset
+        part.Anchored = true
+    end
 end
+
 
 local function onInputBegan(input, processed)
 	if processed then
