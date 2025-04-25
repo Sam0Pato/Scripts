@@ -98,8 +98,16 @@ end
 local function makeWall()
     activateTools()
 
+		task.wait(0.5)
+
+		if #paperTable < 1 then
+			return
+		end
+
+	
+
     local startPosition = mouse.Hit.Position
-    local paperSize = paperTable[1].Size  
+    local paperSize = paperTable[1].Size
     local wallSizeX = math.round(#paperTable / 2)
     local wallSizeY = wallSizeX
 
@@ -108,8 +116,8 @@ local function makeWall()
             local index = (col - 1) * wallSizeY + row
 			
             if index > totalParts then
-				break
-			end
+							break
+						end
 
             local part = paperTable[index]
 			
@@ -187,7 +195,7 @@ local function onChildAdded(child: Instance)
 	bodyAngularVelocity.P = "inf"
 	bodyAngularVelocity.MaxTorque = Vector3.new("inf", "inf", "inf")
 	bodyAngularVelocity.AngularVelocity = Vector3.new(0, "inf", 0) 
-		
+	
 	table.insert(paperTable, child)
 end
 
