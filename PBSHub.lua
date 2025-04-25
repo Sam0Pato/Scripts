@@ -79,25 +79,27 @@ end
 -- << MAIN >> --
 
 local function activateTools()
-	debounce = true
-
-	local backpack = localPlayer.Backpack
-
-	for _, tool in ipairs(backpack:GetChildren()) do
-		if tool.Name ~= "TpRoll" then
-			continue
+	task.spawn(function()		
+		debounce = true
+	
+		local backpack = localPlayer.Backpack
+	
+		for _, tool in ipairs(backpack:GetChildren()) do
+			if tool.Name ~= "TpRoll" then
+				continue
+			end
+	
+			tool.Parent = localPlayer.Character	
+			task.spawn(function()
+				tool:Activate()
+				tool.Parent = backpack
+			end)
 		end
 
-		tool.Parent = localPlayer.Character	
-		task.spawn(function()
-			tool:Activate()
-			tool.Parent = backpack
-		end)
-	end
+		task.wait(1)
 
-	task.wait(1)
-
-	debounce = false
+		debounce = false
+	end)
 end
 
 local function makeWall(desiredCols, desiredRows)
