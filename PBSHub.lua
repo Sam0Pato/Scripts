@@ -167,7 +167,7 @@ end
 -- << SETUP >> --
 
 local function onRenderStepped()
-	local hit = mouse.Hit.Position    
+	local hit = mouse.Hit.Position or Vector3.new(0, 0, 0)
 	local mousePosition = Vector3.new(hit.X, hit.Y + 2.5, hit.Z)
 
 	for _,child: BasePart in pairs(paperTable) do
@@ -176,7 +176,8 @@ local function onRenderStepped()
 		end
 
 		sethiddenproperty(localPlayer, "SimulationRadius", math.huge)
-		mouseAttachment.Position = hit
+		
+		mouseAttachment.Position = mousePosition 
 	end
 end 
 
