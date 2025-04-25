@@ -151,7 +151,7 @@ local function onChildAdded(child: Instance)
 	local bodyAngularVelocity = Instance.new("BodyAngularVelocity", child)    
 	bodyAngularVelocity.P = "inf"
 	bodyAngularVelocity.MaxTorque = Vector3.new("inf", "inf", "inf")
-	bodyAngularVelocity.AngularVelocity = Vector3.new(10000000000, 10000000000, 10000000000) 
+	bodyAngularVelocity.AngularVelocity = Vector3.new(0, "inf", 0) 
 		
 	table.insert(paperTable, child)
 end
