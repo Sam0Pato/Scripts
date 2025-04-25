@@ -100,7 +100,7 @@ local function makeWall()
 
 	local startPosition = mouse.Hit.Position
     local paperSize = paperTable[1].Size  
-    local wallSizeX = math.round(totalParts / 2)
+    local wallSizeX = math.round(#paperTable / 2)
     local wallSizeY = wallSizeX
 
     for col = 1, wallSizeX do
@@ -160,7 +160,7 @@ local function onRenderStepped()
 		end
 
 		sethiddenproperty(localPlayer, "SimulationRadius", math.huge)
-		child.Velocity = Vector3.new(math.random(1, 100), math.random(1, 100), math.random(1, 100))
+		--child.Velocity = Vector3.new(math.random(1, 100), math.random(1, 100), math.random(1, 100))
         --child.BodyPosition.Position = mousePosition
 	end
 end 
