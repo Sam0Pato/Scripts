@@ -118,7 +118,8 @@ local function makeWall(desiredCols, desiredRows)
 
 		local part = paperTable[i]
 		local worldOffset = (col * panel.Size.X) * (row * panel.Size.Z)
-		local pos = origin + worldOffset
+		local pos = origin
+		pos.Y += worldOffset
 
 		part.Position = pos
 		task.wait(0.1)
