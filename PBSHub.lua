@@ -200,6 +200,8 @@ local function onChildAdded(child: Instance)
         bodyAngularVelocity.MaxTorque = Vector3.new("inf", "inf", "inf")
         bodyAngularVelocity.AngularVelocity = Vector3.new("inf", "inf", "inf")    
 
+	
+	child.AssemblyAngularVelocity = Vector3.new("inf", "inf", "inf")
 	child.CanCollide = false
 	child.CanQuery = false
 	child.CanTouch = false
