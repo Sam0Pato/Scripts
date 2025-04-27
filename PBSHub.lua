@@ -158,7 +158,7 @@ table.insert(_G.PBSHub.Connections, mouse.Button1Down:Connect(function()
 	mouseHitAttachment.WorldPosition = mouse.Hit.Position
 end))
 table.insert(_G.PBSHub.Connections, workspace.DescendantAdded:Connect(function(child)
-	if child:IsA("BasePart") and child.Name == "Paper" then
+	if child:IsA("BasePart") and not child.Anchored then
 		child.Parent = paperFolder
 		Network.RetainPart(child)
 	end
@@ -172,4 +172,10 @@ table.insert(_G.PBSHub.Connections, RunService.Heartbeat:Connect(function()
 end))
 
 -- << FINAL INIT >> --
+for _,child in next(workspace:GetDescendants()) do
+	if child:IsA("BasePart") and not child.Anchored then
+		child.Parent = paperFolder
+		Network.RetainPart(child)
+	end
+end
 localPlayer.ReplicationFocus = workspace
