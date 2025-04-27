@@ -144,13 +144,13 @@ local function makeWall(desiredCols, desiredRows)
 		local targetRot = CFrame.lookAt(targetPos, targetPos + camForward) * CFrame.Angles(math.rad(-90), 0, 0)
 
 		local alignOrientation = Instance.new("AlignOrientation", part)
-		alignOrientation.RigityEnabled = true
+		alignOrientation.RigidityEnabled = true
 		alignPosition.Mode = "OneAttachment"
 		alignOrientation.CFrame = targetRot
 		alignOrientation.Attachment0 = part.Attachment
 
 		local alignPosition = Instance.new("AlignPosition", part)
-		alignPosition.RigityEnabled = true
+		alignPosition.RigidityEnabled = true
 		alignPosition.Mode = "OneAttachment"
 		alignPosition.Attachment0 = part.Attachment
 		alignPosition.Position = targetPos
