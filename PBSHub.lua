@@ -200,8 +200,8 @@ local function onChildAdded(child: Instance)
 	attachment.Parent = child
 	
 	local alignPosition = Instance.new("AlignPosition")
-	alignPosition.Attachment1 = mouseAttachment
-	alignPosition.Attachment0 = attachment
+	alignPosition.Attachment1 = attachment
+	alignPosition.Attachment0 = mouseAttachment
 	alignPosition.RigidityEnabled = true
 	alignPosition.Parent = child
 
