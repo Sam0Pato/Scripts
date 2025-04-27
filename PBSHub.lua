@@ -40,7 +40,7 @@ end
 
 
 if not paperFolder then
-	paperFolder = Instance.new("Folder", workspace)
+	paperFolder = Instance.new("Model", workspace)
 end
 paperFolder.Name = "PaperFolder"
 
