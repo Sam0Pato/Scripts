@@ -103,6 +103,10 @@ local function activateTools()
 end
 
 local function makeWall(desiredCols, desiredRows)
+	activateTools()
+
+	task.wait(0.3)
+	
 	local totalParts = #paperTable
 
 	if totalParts == 0 then
