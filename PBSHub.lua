@@ -199,16 +199,17 @@ local function onChildAdded(child: Instance)
 	alignPosition.Attachment0 = attachment
 	alignPosition.RigidityEnabled = true
 
-	warn("Created")
+	child.CanCollide = false
+	child.CanQuery = false
+	child.CanTouch = false
 
+	
+	--[[
 	local bodyAngularVelocity = Instance.new("BodyAngularVelocity", child)    
         bodyAngularVelocity.P = "inf"
         bodyAngularVelocity.MaxTorque = Vector3.new("inf", "inf", "inf")
         bodyAngularVelocity.AngularVelocity = Vector3.new("inf", "inf", "inf")    
-
-	child.CanCollide = false
-	child.CanQuery = false
-	child.CanTouch = false
+	]]--
 
 	table.insert(paperTable, child)
 
