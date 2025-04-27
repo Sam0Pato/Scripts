@@ -166,23 +166,17 @@ local function onInputBegan(input, processed)
 		activateTools()
 		return
 	end
-
-	localPlayer.ReplicationFocus = workspace
 end
 
 
 -- << SETUP >> --
 
 local function onRenderStepped()
+	sethiddenproperty(localPlayer, "SimulationRadius", math.huge)	
+	local hit = mouse.Hit
+	
 	for _,child: BasePart in pairs(paperTable) do
-		if not child then
-			continue
-		end
-
-		sethiddenproperty(localPlayer, "SimulationRadius", math.huge)	
-
-		local hit = mouse.Hit
-		if hit then	
+		if hit then
 			local position = Vector3.new(hit.X, hit.Y + 2.5, hit.Z)
 			mouseAttachment.Position = position
 		end
