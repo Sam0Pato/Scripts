@@ -205,9 +205,9 @@ local function onChildAdded(child: Instance)
 
 	local attachment = Instance.new("Attachment", child)
 	
-	child.CanCollide = false
-	child.CanQuery = false
-	child.CanTouch = false
+	--child.CanCollide = false
+	--child.CanQuery = false
+	--child.CanTouch = false
 
 	RunService.RenderStepped:Wait()
 	
