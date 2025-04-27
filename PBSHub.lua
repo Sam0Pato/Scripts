@@ -121,12 +121,14 @@ local function createWall()
 
 		local alignPos = Instance.new("AlignPosition")
 		alignPos.Mode = "OneAttachment"
+		alignPos.Attachment0 = part.Attachment
 		alignPos.RigidityEnabled = true
 		alignPos.Position = startPos + offset
 		alignPos.Parent = part
 
 		local alignOri = Instance.new("AlignOrientation")
 		alignOri.Mode = "OneAttachment"
+		alignOri.Attachment0 = part.Attachment
 		alignOri.RigidityEnabled = true
 		alignOri.CFrame = CFrame.lookAt(alignPos.Position, alignPos.Position + forward)
 		alignOri.Parent = part
