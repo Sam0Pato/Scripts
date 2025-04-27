@@ -118,7 +118,7 @@ local function activateTools()
 end
 
 local function makeWall(desiredCols, desiredRows)
-	if not autoWall then
+	if not autoWall or not debounce then
 		return
 	end
 	
