@@ -194,10 +194,6 @@ local function onChildAdded(child: Instance)
 		return
 	end
 
-	if not string.find(child.Name, localPlayer.Name) then
-		return
-	end
-
 	child.CanCollide = false
 	child.CanQuery = false
 	child.CanTouch = false
