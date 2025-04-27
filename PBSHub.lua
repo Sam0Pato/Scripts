@@ -1,6 +1,5 @@
 -- << VARIABLES >> --
 local UserInputService = game:GetService("UserInputService")
-local PhysicsService = game:GetService("PhysicsService")
 local StarterGui = game:GetService("StarterGui")
 local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
@@ -121,13 +120,14 @@ local function createWall()
 		local offset = right * (col - cols/2) * partSize.X + Vector3.new(0, row * partSize.Y, 0)
 
 		local alignPos = Instance.new("AlignPosition")
-		alignPos.ApplyAtCenterOfMass = true
+		alignPos.Mode = "OneAttachment"
 		alignPos.RigidityEnabled = true
 		alignPos.Position = startPos + offset
 		alignPos.Parent = part
 
 		local alignOri = Instance.new("AlignOrientation")
-		alignPos.RigidityEnabled = true
+		alignOri.Mode = "OneAttachment"
+		alignOri.RigidityEnabled = true
 		alignOri.CFrame = CFrame.lookAt(alignPos.Position, alignPos.Position + forward)
 		alignOri.Parent = part
 	end
