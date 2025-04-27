@@ -4,6 +4,9 @@ local StarterGui = game:GetService("StarterGui")
 local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
 
+local localPlayer = Players.LocalPlayer
+local mouse = localPlayer:GetMouse()
+
 local paperFolder = workspace:FindFirstChild("PaperFolder") or Instance.new("Folder", workspace)
 paperFolder.Name = "PaperFolder"
 
@@ -12,9 +15,6 @@ mousePositionAttachment.Name = "Target"
 
 local mouseHitAttachment = workspace.Terrain:FindFirstChild("Hit") or Instance.new("Attachment", workspace.Terrain)
 mouseHitAttachment.Name = "Hit"
-
-local localPlayer = Players.LocalPlayer
-local mouse = localPlayer:GetMouse()
 
 local debounce = false
 local autoWall = false
