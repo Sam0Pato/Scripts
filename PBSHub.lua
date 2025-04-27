@@ -208,6 +208,9 @@ local function onChildAdded(child: Instance)
 	child.CanCollide = false
 	child.CanQuery = false
 	child.CanTouch = false
+
+	RunService.RenderStepped:Wait()
+	
 	child.Parent = paperFolder
 end
 
