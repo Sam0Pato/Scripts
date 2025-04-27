@@ -13,6 +13,7 @@ local localPlayer = Players.LocalPlayer
 local mouse = localPlayer:GetMouse()
 
 local debounce = false
+local autoWall = false
 
 -- << LOADING >> --
 
@@ -45,11 +46,17 @@ end
 paperFolder.Name = "PaperFolder"
 
 
-if not mouseAttachment then
-	mouseAttachment = Instance.new("Attachment", workspace.Terrain)
+if not mousePositionAttachment then
+	mousePositionAttachment = Instance.new("Attachment", workspace.Terrain)
 end
-mouseAttachment.Name = "Target"
-mouseAttachment.Visible = false
+mousePositionAttachment.Name = "Target"
+
+
+if not mouseHitAttachment then
+	mouseHitAttachment = Instance.new("Attachment", workspace.Terrain)
+end
+mouseHitAttachment.Visible = true
+mouseHitAttachment.Name = "Hit"
 
 
 -- << PART CLAIM >> --
@@ -111,6 +118,10 @@ local function activateTools()
 end
 
 local function makeWall(desiredCols, desiredRows)
+	if not autoWall then
+		return
+	end
+	
 	activateTools()
 
 	task.wait(0.3)
@@ -122,11 +133,7 @@ local function makeWall(desiredCols, desiredRows)
 		return
 	end
 
-	if not mouse.Hit then
-		return
-	end
-
-	local startPos = mouse.Hit.Position
+	local startPos = mouseHitAttachment
 	local samplePart = paperTable[1]
 	local partWidth = samplePart.Size.X
 	local partHeight = samplePart.Size.Z
@@ -175,7 +182,7 @@ local function onInputBegan(input, processed)
 	end
 
 	if input.KeyCode.Name == "E" then
-		makeWall()
+		autoWall = not autoWall
 		return
 	end
 
@@ -194,8 +201,10 @@ local function onRenderStepped()
 
 	if hit then
 		local position = Vector3.new(hit.X, hit.Y + 2.5, hit.Z)
-		mouseAttachment.Position = position
+		mousePositionAttachment.Position = position
 	end
+
+	makeWall()
 end 
 
 local function onChildAdded(child: Instance)
@@ -214,6 +223,11 @@ local function onChildAdded(child: Instance)
 	child.Parent = paperFolder
 end
 
+local function onButton1Down()
+	mouseHitAttachment.Position = mouse.Hit.Position
+end
+
+table.insert(_G.PBSHub.Connections, mouse.Button1Down:Connect(onButton1Down))
 table.insert(_G.PBSHub.Connections, workspace.ChildAdded:Connect(onChildAdded))
 table.insert(_G.PBSHub.Connections, UserInputService.InputBegan:Connect(onInputBegan))
 table.insert(_G.PBSHub.Connections, RunService.RenderStepped:Connect(onRenderStepped))
