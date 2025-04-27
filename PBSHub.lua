@@ -202,15 +202,17 @@ local function onChildAdded(child: Instance)
 
 	local attachment = Instance.new("Attachment", child)
 
+	--[[
 	local alignPosition = Instance.new("AlignPosition", child)
 	alignPosition.Attachment0 = attachment
 	alignPosition.Attachment1 = attachment
 	alignPosition.RigidityEnabled = true
 
-	local bodyAngularVelocity = Instance.new("BodyAngularVelocity", nil)    
+	local bodyAngularVelocity = Instance.new("BodyAngularVelocity", chld)    
 	bodyAngularVelocity.P = "inf"
 	bodyAngularVelocity.MaxTorque = Vector3.new("inf", "inf", "inf")
 	bodyAngularVelocity.AngularVelocity = Vector3.new("inf", "inf", "inf")    
+	]]--
 
 	table.insert(paperTable, child)
 
