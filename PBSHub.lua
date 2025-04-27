@@ -1,5 +1,6 @@
 -- << VARIABLES >> --
 local UserInputService = game:GetService("UserInputService")
+local PhysicsService = game:GetService("PhysicsService")
 local StarterGui = game:GetService("StarterGui")
 local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
@@ -153,9 +154,12 @@ end
 
 -- << SETUP >> --
 
+PhysicsService:RegisterCollisionGroup("Parts")
+PhysicsService:CollisionGroupSetCollidable("Parts", "Player", false)
 local function onDescendantAdded(child)
 	if child:IsA("BasePart") and not child.Anchored then
 		child.Parent = paperFolder
+		child.CollisionGroup = "Parts"
 		Network.RetainPart(child)
 	end
 end
