@@ -124,7 +124,7 @@ local function makeWall(desiredCols, desiredRows)
 	
 	activateTools()
 
-	task.wait(0.3)
+	task.wait(0.1)
 	
 	local paperTable = paperFolder:GetChildren()
 	local totalParts = #paperTable
@@ -173,6 +173,8 @@ local function makeWall(desiredCols, desiredRows)
 
 		part.Anchored = true
 	end
+
+	task.wait(0.9)
 end
 
 
