@@ -192,16 +192,18 @@ local function onChildAdded(child: Instance)
 		return
 	end
 
-	local attachment = Instance.new("Attachment", child)
-	
-	local alignPosition = Instance.new("AlignPosition", child)
-	alignPosition.Attachment1 = mouseAttachment
-	alignPosition.Attachment0 = attachment
-	alignPosition.RigidityEnabled = true
-
 	child.CanCollide = false
 	child.CanQuery = false
 	child.CanTouch = false
+
+	local attachment = Instance.new("Attachment")
+	attachment.Parent = child
+	
+	local alignPosition = Instance.new("AlignPosition")
+	alignPosition.Attachment1 = mouseAttachment
+	alignPosition.Attachment0 = attachment
+	alignPosition.RigidityEnabled = true
+	alignPosition.Parent = child
 
 	
 	--[[
