@@ -175,11 +175,9 @@ local function onRenderStepped()
 	sethiddenproperty(localPlayer, "SimulationRadius", math.huge)	
 	local hit = mouse.Hit
 	
-	for _,child: BasePart in pairs(paperTable) do
-		if hit then
-			local position = Vector3.new(hit.X, hit.Y + 2.5, hit.Z)
-			mouseAttachment.Position = position
-		end
+	if hit then
+		local position = Vector3.new(hit.X, hit.Y + 2.5, hit.Z)
+		mouseAttachment.Position = position
 	end
 end 
 
@@ -200,8 +198,8 @@ local function onChildAdded(child: Instance)
 	attachment.Parent = child
 	
 	local alignPosition = Instance.new("AlignPosition")
-	alignPosition.Attachment1 = attachment
-	alignPosition.Attachment0 = mouseAttachment
+	alignPosition.Attachment0 = attachment
+	alignPosition.Attachment1 = mouseAttachment
 	alignPosition.RigidityEnabled = true
 	alignPosition.Parent = child
 
