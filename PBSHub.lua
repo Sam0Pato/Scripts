@@ -164,7 +164,7 @@ local function makeWall(desiredCols, desiredRows)
 		alignPosition.Attachment0 = part.Attachment
 		alignPosition.Position = targetPos
 
-		part.Anchored = true
+		--part.Anchored = true
 	end
 end
 
