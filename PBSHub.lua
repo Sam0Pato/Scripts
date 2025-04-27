@@ -119,6 +119,8 @@ local function createWall()
 		local row = math.floor((i - 1) / cols)
 		local offset = right * (col - cols/2) * partSize.X + Vector3.new(0, row * partSize.Y, 0)
 
+		Instance.new("Attachment", part)
+
 		local alignPos = Instance.new("AlignPosition")
 		alignPos.Mode = "OneAttachment"
 		alignPos.Attachment0 = part.Attachment
@@ -160,7 +162,6 @@ local function onDescendantAdded(child)
 	if child:IsA("BasePart") and not child.Anchored and not child:IsDescendantOf(localPlayer.Character) then
 		RunService.RenderStepped:Wait()
 
-		Instance.new("Attachment", child)
 		child.Parent = paperFolder
 		child.CollisionGroup = "Players"
 		Network.RetainPart(child)
