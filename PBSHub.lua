@@ -81,14 +81,14 @@ end
 local function activateTools()
 	task.spawn(function()		
 		debounce = true
-	
+
 		local backpack = localPlayer.Backpack
-	
+
 		for _, tool in ipairs(backpack:GetChildren()) do
 			if tool.Name ~= "TpRoll" then
 				continue
 			end
-	
+
 			tool.Parent = localPlayer.Character	
 			task.spawn(function()
 				tool:Activate()
@@ -103,7 +103,6 @@ local function activateTools()
 end
 
 local function makeWall(desiredCols, desiredRows)
-	--[[
 	local totalParts = #paperTable
 
 	if totalParts == 0 then
@@ -125,10 +124,8 @@ local function makeWall(desiredCols, desiredRows)
 	local totalWidth = cols * partWidth
 	local totalHeight = rows * partHeight
 
-	local camForward = (camera.CFrame.LookVector * Vector3.new(1, 0, 1)).Unit
+	local camForward = (workspace.CurrentCamera.CFrame.LookVector * Vector3.new(1, 0, 1)).Unit
 	local camRight = Vector3.new(-camForward.Z, 0, camForward.X).Unit
-
-	local base = getAttachmentBase()
 
 	for i = 1, totalParts do
 		local part = paperTable[i]
@@ -142,23 +139,27 @@ local function makeWall(desiredCols, desiredRows)
 		local targetPos = startPos + camRight * offsetX + Vector3.new(0, offsetY, 0)
 		local targetRot = CFrame.lookAt(targetPos, targetPos + camForward) * CFrame.Angles(math.rad(-90), 0, 0)
 
-		createAlignConstraint(part, targetPos, targetRot, base)
+		local alignOrientation = Instance.new("AlignOrientation", part)
+		alignOrientation.RigityEnabled = true
+		alignOrientation.CFrame = targetRot
+		alignOrientation.Attachment0 = part.Attachment
+
+		local alignPosition = Instance.new("AlignPosition", part)
+		alignPosition.RigityEnabled = true
+		alignPosition.Mode = "OneAttachment"
+		alignPosition.Attachment0 = part.Attachment
+		alignPosition.Position = targetPos
 	end
-	--]]
 end
 
 
 local function onInputBegan(input, processed)
-	if processed then
-		return
-	end
-
-	if debounce then 
+	if processed or debounce then
 		return
 	end
 
 	if input.KeyCode.Name == "E" then
-		--makeWall()
+		makeWall()
 		return
 	end
 
@@ -174,7 +175,7 @@ end
 local function onRenderStepped()
 	sethiddenproperty(localPlayer, "SimulationRadius", math.huge)	
 	local hit = mouse.Hit
-	
+
 	if hit then
 		local position = Vector3.new(hit.X, hit.Y + 2.5, hit.Z)
 		mouseAttachment.Position = position
@@ -193,16 +194,18 @@ local function onChildAdded(child: Instance)
 	child.CanCollide = false
 	child.CanQuery = false
 	child.CanTouch = false
-	
+
+	local attachment = Instance.new("Attachment", child)
+
 	local alignPosition = Instance.new("AlignPosition", child)
-	alignPosition.Attachment0 = Instance.new("Attachment", child)
-	alignPosition.Attachment1 = mouseAttachment
+	alignPosition.Attachment0 = attachment
+	alignPosition.Attachment1 = attachment
 	alignPosition.RigidityEnabled = true
 
-	local bodyAngularVelocity = Instance.new("BodyAngularVelocity", child)    
-        bodyAngularVelocity.P = "inf"
-        bodyAngularVelocity.MaxTorque = Vector3.new("inf", "inf", "inf")
-        bodyAngularVelocity.AngularVelocity = Vector3.new("inf", "inf", "inf")    
+	local bodyAngularVelocity = Instance.new("BodyAngularVelocity", nil)    
+	bodyAngularVelocity.P = "inf"
+	bodyAngularVelocity.MaxTorque = Vector3.new("inf", "inf", "inf")
+	bodyAngularVelocity.AngularVelocity = Vector3.new("inf", "inf", "inf")    
 
 	table.insert(paperTable, child)
 
