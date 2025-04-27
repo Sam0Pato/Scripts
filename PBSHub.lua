@@ -167,7 +167,7 @@ end
 table.insert(_G.PBSHub.Connections, UserInputService.InputBegan:Connect(onInputBegan))
 table.insert(_G.PBSHub.Connections, workspace.DescendantAdded:Connect(onDescendantAdded))
 table.insert(_G.PBSHub.Connections, mouse.Button1Down:Connect(function()
-	mouseHitAttachment.WorldPosition = mouse.Hit.Position
+	mouseHitAttachment.Position = mouse.Hit.Position
 end))
 table.insert(_G.PBSHub.Connections, RunService.Heartbeat:Connect(function()
 	sethiddenproperty(localPlayer, "SimulationRadius", math.huge)
