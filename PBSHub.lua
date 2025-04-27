@@ -183,7 +183,7 @@ end))
 
 -- << FINAL INIT >> --
 for _,child in next, workspace:GetDescendants() do
-	if child.Parent.Parent ~= worskpace then
+	if child.Parent.Parent ~= workspace then
 		onChildAdded(child)
 	end
 end
