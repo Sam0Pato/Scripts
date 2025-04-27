@@ -2,28 +2,17 @@
 -- << VARIABLES >> --
 
 local UserInputService = game:GetService("UserInputService")
+--local CoreGui = cloneref(game:GetService("CoreGui"))
 local StarterGui = game:GetService("StarterGui")
 local RunService = game:GetService("RunService")
---local CoreGui = cloneref(game:GetService("CoreGui"))
+local Players = game:GetService("Players")
 
-local localPlayer = game:GetService("Players").LocalPlayer
+local paperFolder = workspace.Terrain:FindFirstChild("PaperFolder")
+local mouseAttachment = workspace.Terrain:FindFirstChild("Target")
+local localPlayer = Players.LocalPlayer
 local mouse = localPlayer:GetMouse()
 
 local debounce = false
-
-local paperFolder = workspace.Terrain:FindFirstChild("PaperFolder")
-if not paperFolder then
-	paperFolder = Instance.new("Folder", workspace.Terrain)
-end
-paperFolder.Name = "PaperFolder"
-
-local mouseAttachment = workspace.Terrain:FindFirstChild("Target")
-if not mouseAttachment then
-	mouseAttachment = Instance.new("Attachment", workspace.Terrain)
-end
-
-mouseAttachment.Name = "Target"
-mouseAttachment.Visible = false
 
 -- << LOADING >> --
 
@@ -48,6 +37,19 @@ else
 
 	_G.PBSHub = { Connections = {} }
 end
+
+
+if not paperFolder then
+	paperFolder = Instance.new("Folder", workspace.Terrain)
+end
+paperFolder.Name = "PaperFolder"
+
+
+if not mouseAttachment then
+	mouseAttachment = Instance.new("Attachment", workspace.Terrain)
+end
+mouseAttachment.Name = "Target"
+mouseAttachment.Visible = false
 
 
 -- << PART CLAIM >> --
@@ -201,24 +203,11 @@ local function onChildAdded(child: Instance)
 		return
 	end
 
+	local attachment = Instance.new("Attachment", child)
+	
 	child.CanCollide = false
 	child.CanQuery = false
 	child.CanTouch = false
-
-	local attachment = Instance.new("Attachment", child)
-
-	--[[
-	local alignPosition = Instance.new("AlignPosition", child)
-	alignPosition.Attachment0 = attachment
-	alignPosition.Attachment1 = attachment
-	alignPosition.RigidityEnabled = true
-
-	local bodyAngularVelocity = Instance.new("BodyAngularVelocity", chld)    
-	bodyAngularVelocity.P = "inf"
-	bodyAngularVelocity.MaxTorque = Vector3.new("inf", "inf", "inf")
-	bodyAngularVelocity.AngularVelocity = Vector3.new("inf", "inf", "inf")    
-	]]--
-
 	child.Parent = paperFolder
 end
 
