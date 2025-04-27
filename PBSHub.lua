@@ -159,7 +159,8 @@ end
 local function onDescendantAdded(child)	
 	if child:IsA("BasePart") and not child.Anchored and not child:IsDescendantOf(localPlayer.Character) then
 		RunService.RenderStepped:Wait()
-		
+
+		Instance.new("Attachment", child)
 		child.Parent = paperFolder
 		child.CollisionGroup = "Players"
 		Network.RetainPart(child)
