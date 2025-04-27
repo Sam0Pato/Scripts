@@ -7,7 +7,7 @@ local StarterGui = game:GetService("StarterGui")
 local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
 
-local paperFolder = workspace.Terrain:FindFirstChild("PaperFolder")
+local paperFolder = workspace:FindFirstChild("PaperFolder")
 local mouseAttachment = workspace.Terrain:FindFirstChild("Target")
 local localPlayer = Players.LocalPlayer
 local mouse = localPlayer:GetMouse()
@@ -40,7 +40,7 @@ end
 
 
 if not paperFolder then
-	paperFolder = Instance.new("Folder", workspace.Terrain)
+	paperFolder = Instance.new("Folder", workspace)
 end
 paperFolder.Name = "PaperFolder"
 
