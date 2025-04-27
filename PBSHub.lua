@@ -1,14 +1,18 @@
-
 -- << VARIABLES >> --
-
 local UserInputService = game:GetService("UserInputService")
---local CoreGui = cloneref(game:GetService("CoreGui"))
 local StarterGui = game:GetService("StarterGui")
 local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
 
-local paperFolder = workspace:FindFirstChild("PaperFolder")
-local mouseAttachment = workspace.Terrain:FindFirstChild("Target")
+local paperFolder = workspace:FindFirstChild("PaperFolder") or Instance.new("Folder", workspace)
+paperFolder.Name = "PaperFolder"
+
+local mousePositionAttachment = workspace.Terrain:FindFirstChild("Target") or Instance.new("Attachment", workspace.Terrain)
+mousePositionAttachment.Name = "Target"
+
+local mouseHitAttachment = workspace.Terrain:FindFirstChild("Hit") or Instance.new("Attachment", workspace.Terrain)
+mouseHitAttachment.Name = "Hit"
+
 local localPlayer = Players.LocalPlayer
 local mouse = localPlayer:GetMouse()
 
@@ -16,220 +20,156 @@ local debounce = false
 local autoWall = false
 
 -- << LOADING >> --
-
 if _G.PBSHub then
-	for _, connection in pairs(_G.PBSHub.Connections) do	
+	for _, connection in pairs(_G.PBSHub.Connections) do
 		connection:Disconnect()
 	end
-
 	StarterGui:SetCore("SendNotification", {
-		Title = "PBS Hub by samopato",
-		Text = "RELOADED ☑",
+		Title = "PBS Hub Reloaded ☑",
 		Icon = "rbxassetid://89210547385522",
-		Duration = 5
-	})
-else
-	StarterGui:SetCore("SendNotification", {
-		Title = "PBS Hub by samopato",
-		Text = "Loaded 👅👅👅",
-		Icon = "rbxassetid://89210547385522",
+		Text = "Successfully reloaded!",
 		Duration = 3
 	})
-
+else
 	_G.PBSHub = { Connections = {} }
+	StarterGui:SetCore("SendNotification", {
+		Title = "PBS Hub Loaded 🥵👅",
+		Icon = "rbxassetid://83150944197304",
+		Text = "Press E to toggle walls\nPress Q to activate tools",
+		Duration = 3
+	})
 end
 
-
-if not paperFolder then
-	paperFolder = Instance.new("Model", workspace)
-end
-paperFolder.Name = "PaperFolder"
-
-
-if not mousePositionAttachment then
-	mousePositionAttachment = Instance.new("Attachment", workspace.Terrain)
-end
-mousePositionAttachment.Name = "Target"
-
-
-if not mouseHitAttachment then
-	mouseHitAttachment = Instance.new("Attachment", workspace.Terrain)
-end
-mouseHitAttachment.Visible = true
-mouseHitAttachment.Name = "Hit"
-
-
--- << PART CLAIM >> --
-
+-- << NETWORK CONTROL >> --
 if not getgenv().Network then
 	getgenv().Network = {
 		BaseParts = {},
-		Velocity = Vector3.new(14.46262424, 14.46262424, 14.46262424)
+		Velocity = Vector3.new(14.46, 14.46, 14.46)
 	}
 
-	Network.RetainPart = function(Part)
-		if typeof(Part) == "Instance" and Part:IsA("BasePart") and Part:IsDescendantOf(Workspace) then
-			table.insert(Network.BaseParts, Part)
-			Part.CanCollide = false
+	function Network.RetainPart(part)
+		if part:IsA("BasePart") and part:IsDescendantOf(workspace) then
+			part.CanCollide = false
+			table.insert(Network.BaseParts, part)
 		end
 	end
 
 	local function EnablePartControl()
 		localPlayer.ReplicationFocus = workspace
-
 		RunService.Heartbeat:Connect(function()
 			sethiddenproperty(localPlayer, "SimulationRadius", math.huge)
-			for _, Part in pairs(Network.BaseParts) do
-				if Part:IsDescendantOf(workspace) then
-					Part.Velocity = Network.Velocity
+			for _, part in pairs(Network.BaseParts) do
+				if part:IsDescendantOf(workspace) then
+					part.Velocity = Network.Velocity
 				end
 			end
 		end)
 	end
-
 	EnablePartControl()
 end
 
-
--- << MAIN >> --
-
+-- << MAIN FUNCTIONS >> --
 local function activateTools()
-	task.spawn(function()		
-		debounce = true
+	if debounce then return end
+	debounce = true
 
-		local backpack = localPlayer.Backpack
-
-		for _, tool in ipairs(backpack:GetChildren()) do
-			if tool.Name ~= "TpRoll" then
-				continue
-			end
-
-			tool.Parent = localPlayer.Character	
-			task.spawn(function()
-				tool:Activate()
-				tool.Parent = backpack
-			end)
+	local backpack = localPlayer.Backpack
+	for _, tool in ipairs(backpack:GetChildren()) do
+		if tool.Name == "TpRoll" then
+			tool.Parent = localPlayer.Character
+			tool:Activate()
+			tool.Parent = backpack
 		end
+	end
 
-		task.wait(1)
-
-		debounce = false
-	end)
+	task.wait(0.8)
+	debounce = false
 end
 
-local function makeWall(desiredCols, desiredRows)
-	if not autoWall or not debounce then
-		return
-	end
-	
+local function createWall()
+	if not autoWall or debounce then return end
+	debounce = true
+
 	activateTools()
+	task.wait(0.2)
 
-	task.wait(0.1)
-	
-	local paperTable = paperFolder:GetChildren()
-	local totalParts = #paperTable
-
-	if totalParts == 0 then
+	local papers = paperFolder:GetChildren()
+	if #papers == 0 then
+		debounce = false
 		return
 	end
 
-	local startPos = mouseHitAttachment
-	local samplePart = paperTable[1]
-	local partWidth = samplePart.Size.X
-	local partHeight = samplePart.Size.Z
+	local cam = workspace.CurrentCamera
+	local forward = (cam.CFrame.LookVector * Vector3.new(1, 0, 1)).Unit
+	local right = Vector3.new(-forward.Z, 0, forward.X).Unit
+	local startPos = mouseHitAttachment.WorldPosition
 
-	local cols = desiredCols or math.ceil(math.sqrt(totalParts))
-	local rows = desiredRows or math.ceil(totalParts / cols)
+	local cols = math.ceil(math.sqrt(#papers))
+	local rows = math.ceil(#papers / cols)
+	local partSize = papers[1].Size
 
-	local totalWidth = cols * partWidth
-	local totalHeight = rows * partHeight
-
-	local camForward = (workspace.CurrentCamera.CFrame.LookVector * Vector3.new(1, 0, 1)).Unit
-	local camRight = Vector3.new(-camForward.Z, 0, camForward.X).Unit
-
-	for i = 1, totalParts do
-		local part = paperTable[i]
+	for i, part in ipairs(papers) do
+		for _, obj in ipairs(part:GetChildren()) do
+			if obj:IsA("AlignPosition") or obj:IsA("AlignOrientation") then
+				obj:Destroy()
+			end
+		end
 
 		local col = (i - 1) % cols
 		local row = math.floor((i - 1) / cols)
+		local offset = right * (col - cols/2) * partSize.X + Vector3.new(0, row * partSize.Y, 0)
 
-		local offsetX = (col * partWidth) - (totalWidth / 2) + (partWidth / 2)
-		local offsetY = (row * partHeight) + (partHeight / 2)
+		local alignPos = Instance.new("AlignPosition")
+		alignPos.ApplyAtCenterOfMass = true
+		alignPos.RigidityEnabled = true
+		alignPos.Position = startPos + offset
+		alignPos.Parent = part
 
-		local targetPos = startPos + camRight * offsetX + Vector3.new(0, offsetY, 0)
-		local targetRot = CFrame.lookAt(targetPos, targetPos + camForward) * CFrame.Angles(math.rad(-90), 0, 0)
-
-		local alignOrientation = Instance.new("AlignOrientation", part)
-		alignOrientation.RigidityEnabled = true
-		alignOrientation.Mode = "OneAttachment"
-		alignOrientation.CFrame = targetRot
-		alignOrientation.Attachment0 = part.Attachment
-
-		local alignPosition = Instance.new("AlignPosition", part)
-		alignPosition.RigidityEnabled = true
-		alignPosition.Mode = "OneAttachment"
-		alignPosition.Attachment0 = part.Attachment
-		alignPosition.Position = targetPos
-
-		part.Anchored = true
+		local alignOri = Instance.new("AlignOrientation")
+		alignPos.RigidityEnabled = true
+		alignOri.CFrame = CFrame.lookAt(alignPos.Position, alignPos.Position + forward)
+		alignOri.Parent = part
 	end
 
-	task.wait(0.9)
+	task.wait(0.8)
+	debounce = false
 end
 
-
+-- << INPUT HANDLING >> --
 local function onInputBegan(input, processed)
-	if processed or debounce then
-		return
-	end
+	if processed then return end
 
-	if input.KeyCode.Name == "E" then
+	if input.KeyCode == Enum.KeyCode.E then
 		autoWall = not autoWall
-		return
-	end
-
-	if input.KeyCode.Name == "Q" then
+		StarterGui:SetCore("SendNotification", {
+			Title = "Auto Wall",
+			Text = autoWall and "ENABLED" or "DISABLED",
+			Duration = 2
+		})
+	elseif input.KeyCode == Enum.KeyCode.Q then
 		activateTools()
-		return
 	end
 end
-
 
 -- << SETUP >> --
 
-local function onRenderStepped()
-	sethiddenproperty(localPlayer, "SimulationRadius", math.huge)	
-	local hit = mouse.Hit
-
-	if hit then
-		local position = Vector3.new(hit.X, hit.Y + 2.5, hit.Z)
-		mousePositionAttachment.Position = position
-	end
-end
-
-local function onHeartbeat()
-	makeWall()
-	task.wait(1)
-end
-
-local function onChildAdded(child: Instance)
-	if not child:IsA("BasePart") then
-		return
-	end
-
-	local attachment = Instance.new("Attachment", child)
-
-	RunService.RenderStepped:Wait()
-	
-	child.Parent = paperFolder
-end
-
-local function onButton1Down()
-	mouseHitAttachment.Position = mouse.Hit.Position
-end
-
-table.insert(_G.PBSHub.Connections, mouse.Button1Down:Connect(onButton1Down))
-table.insert(_G.PBSHub.Connections, RunService.Heartbeat:Connect(onHeartbeat))
-table.insert(_G.PBSHub.Connections, workspace.ChildAdded:Connect(onChildAdded))
 table.insert(_G.PBSHub.Connections, UserInputService.InputBegan:Connect(onInputBegan))
-table.insert(_G.PBSHub.Connections, RunService.RenderStepped:Connect(onRenderStepped))
+table.insert(_G.PBSHub.Connections, mouse.Button1Down:Connect(function()
+	mouseHitAttachment.WorldPosition = mouse.Hit.Position
+end))
+table.insert(_G.PBSHub.Connections, workspace.DescendantAdded:Connect(function(child)
+	if child:IsA("BasePart") and child.Name == "Paper" then
+		child.Parent = paperFolder
+		Network.RetainPart(child)
+	end
+end))
+table.insert(_G.PBSHub.Connections, RunService.Heartbeat:Connect(function()
+	sethiddenproperty(localPlayer, "SimulationRadius", math.huge)
+	
+	if autoWall then
+		createWall()
+	end
+end))
+
+-- << FINAL INIT >> --
+localPlayer.ReplicationFocus = workspace
