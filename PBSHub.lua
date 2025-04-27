@@ -153,15 +153,17 @@ end
 
 -- << SETUP >> --
 
-table.insert(_G.PBSHub.Connections, UserInputService.InputBegan:Connect(onInputBegan))
-table.insert(_G.PBSHub.Connections, mouse.Button1Down:Connect(function()
-	mouseHitAttachment.WorldPosition = mouse.Hit.Position
-end))
-table.insert(_G.PBSHub.Connections, workspace.DescendantAdded:Connect(function(child)
+local function onDescendantAdded(child)
 	if child:IsA("BasePart") and not child.Anchored then
 		child.Parent = paperFolder
 		Network.RetainPart(child)
 	end
+end
+
+table.insert(_G.PBSHub.Connections, UserInputService.InputBegan:Connect(onInputBegan))
+table.insert(_G.PBSHub.Connections, workspace.DescendantAdded:Connect(onDescendantAdded))
+table.insert(_G.PBSHub.Connections, mouse.Button1Down:Connect(function()
+	mouseHitAttachment.WorldPosition = mouse.Hit.Position
 end))
 table.insert(_G.PBSHub.Connections, RunService.Heartbeat:Connect(function()
 	sethiddenproperty(localPlayer, "SimulationRadius", math.huge)
@@ -173,9 +175,6 @@ end))
 
 -- << FINAL INIT >> --
 for _,child in next(workspace:GetDescendants()) do
-	if child:IsA("BasePart") and not child.Anchored then
-		child.Parent = paperFolder
-		Network.RetainPart(child)
-	end
+	onDescendantAdded(child)
 end
 localPlayer.ReplicationFocus = workspace
