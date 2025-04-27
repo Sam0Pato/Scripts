@@ -205,9 +205,13 @@ local function onRenderStepped()
 		local position = Vector3.new(hit.X, hit.Y + 2.5, hit.Z)
 		mousePositionAttachment.Position = position
 	end
+end
 
-	makeWall()
-end 
+local function onHeartbeat()
+	if not debounce then
+		makeWall()
+	end
+end
 
 local function onChildAdded(child: Instance)
 	if not child:IsA("BasePart") then
@@ -215,10 +219,6 @@ local function onChildAdded(child: Instance)
 	end
 
 	local attachment = Instance.new("Attachment", child)
-	
-	--child.CanCollide = false
-	--child.CanQuery = false
-	--child.CanTouch = false
 
 	RunService.RenderStepped:Wait()
 	
@@ -230,6 +230,7 @@ local function onButton1Down()
 end
 
 table.insert(_G.PBSHub.Connections, mouse.Button1Down:Connect(onButton1Down))
+table.insert(_G.PBSHub.Connections, RunService.Heartbeat:Connect(onHeartbeat))
 table.insert(_G.PBSHub.Connections, workspace.ChildAdded:Connect(onChildAdded))
 table.insert(_G.PBSHub.Connections, UserInputService.InputBegan:Connect(onInputBegan))
 table.insert(_G.PBSHub.Connections, RunService.RenderStepped:Connect(onRenderStepped))
