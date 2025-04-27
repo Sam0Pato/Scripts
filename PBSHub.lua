@@ -10,12 +10,18 @@ local localPlayer = game:GetService("Players").LocalPlayer
 local mouse = localPlayer:GetMouse()
 
 local debounce = false
-local paperTable = {}
+
+local paperFolder = workspace.Terrain:FindFirstChild("PaperFolder")
+if not paperFolder then
+	paperFolder = Instance.new("Folder", workspace.Terrain)
+end
+paperFolder.Name = "PaperFolder"
 
 local mouseAttachment = workspace.Terrain:FindFirstChild("Target")
 if not mouseAttachment then
 	mouseAttachment = Instance.new("Attachment", workspace.Terrain)
 end
+
 mouseAttachment.Name = "Target"
 mouseAttachment.Visible = false
 
@@ -107,14 +113,15 @@ local function makeWall(desiredCols, desiredRows)
 
 	task.wait(0.3)
 	
+	local paperTable = paperFolder:GetChildren()
 	local totalParts = #paperTable
 
 	if totalParts == 0 then
 		return
 	end
 
-	while not mouse.Hit or not mouse.Hit.Position do
-		RunService.Heartbeat:Wait()
+	if not mouse.Hit then
+		return
 	end
 
 	local startPos = mouse.Hit.Position
@@ -212,12 +219,7 @@ local function onChildAdded(child: Instance)
 	bodyAngularVelocity.AngularVelocity = Vector3.new("inf", "inf", "inf")    
 	]]--
 
-	table.insert(paperTable, child)
-
-	local index = #paperTable
-	child.Destroying:Connect(function()
-		table.remove(paperTable, index)
-	end)
+	child.Parent = paperFolder
 end
 
 table.insert(_G.PBSHub.Connections, workspace.ChildAdded:Connect(onChildAdded))
