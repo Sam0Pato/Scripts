@@ -155,7 +155,7 @@ end
 -- << SETUP >> --
 
 local function onDescendantAdded(child)
-	if child:IsA("BasePart") and not child.Anchored then
+	if child:IsA("BasePart") and not child.Anchored and not child:FindFirstChildOfClass("Humanoid") then
 		child.Parent = paperFolder
 		child.CollisionGroup = "Players"
 		Network.RetainPart(child)
