@@ -208,9 +208,8 @@ local function onRenderStepped()
 end
 
 local function onHeartbeat()
-	if not debounce then
-		makeWall()
-	end
+	makeWall()
+	task.wait(1)
 end
 
 local function onChildAdded(child: Instance)
