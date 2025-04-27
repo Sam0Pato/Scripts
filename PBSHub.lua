@@ -180,7 +180,7 @@ table.insert(_G.PBSHub.Connections, RunService.Heartbeat:Connect(function()
 end))
 
 -- << FINAL INIT >> --
-for _,child in next(workspace:GetDescendants()) do
+for _,child in next, workspace:GetDescendants() do
 	onDescendantAdded(child)
 end
 localPlayer.ReplicationFocus = workspace
