@@ -145,7 +145,7 @@ local function makeWall(desiredCols, desiredRows)
 
 		local alignOrientation = Instance.new("AlignOrientation", part)
 		alignOrientation.RigidityEnabled = true
-		alignPosition.Mode = "OneAttachment"
+		alignOrientation.Mode = "OneAttachment"
 		alignOrientation.CFrame = targetRot
 		alignOrientation.Attachment0 = part.Attachment
 
