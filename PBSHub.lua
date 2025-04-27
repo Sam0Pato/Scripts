@@ -154,12 +154,10 @@ end
 
 -- << SETUP >> --
 
-PhysicsService:RegisterCollisionGroup("Parts")
-PhysicsService:CollisionGroupSetCollidable("Parts", "Player", false)
 local function onDescendantAdded(child)
 	if child:IsA("BasePart") and not child.Anchored then
 		child.Parent = paperFolder
-		child.CollisionGroup = "Parts"
+		child.CollisionGroup = "Players"
 		Network.RetainPart(child)
 	end
 end
