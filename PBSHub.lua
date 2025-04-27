@@ -158,8 +158,8 @@ end
 
 -- << SETUP >> --
 
-local function onDescendantAdded(child)	
-	if child:IsA("BasePart") and not child.Anchored and not child:IsDescendantOf(localPlayer.Character) then
+local function onChildAdded(child)	
+	if child:IsA("BasePart") and not child.Anchored then
 		RunService.RenderStepped:Wait()
 
 		child.Parent = paperFolder
@@ -169,7 +169,7 @@ local function onDescendantAdded(child)
 end
 
 table.insert(_G.PBSHub.Connections, UserInputService.InputBegan:Connect(onInputBegan))
-table.insert(_G.PBSHub.Connections, workspace.DescendantAdded:Connect(onDescendantAdded))
+table.insert(_G.PBSHub.Connections, workspace.onChildAdded:Connect(onChildAdded))
 table.insert(_G.PBSHub.Connections, mouse.Button1Down:Connect(function()
 	mouseHitAttachment.Position = mouse.Hit.Position
 end))
@@ -183,6 +183,8 @@ end))
 
 -- << FINAL INIT >> --
 for _,child in next, workspace:GetDescendants() do
-	onDescendantAdded(child)
+	if child.Parent.Parent ~= worskpace then
+		onChildAdded(child)
+	end
 end
 localPlayer.ReplicationFocus = workspace
