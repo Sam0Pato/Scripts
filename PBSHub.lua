@@ -80,7 +80,7 @@ ReGui:Init({
 	Prefabs = InsertService:LoadLocalAsset(PrefabsId)
 })
 
-window = ReGui:Window({ Title = "PBS Hub", Size = UDim2.fromOffset(600, 400) }):Center()
+window = ReGui:Window({ Title = "PBS Hub", Size = UDim2.fromOffset(400, 275) }):Center()
 _G.PBSHub.Window = window
 
 
