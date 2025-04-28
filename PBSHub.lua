@@ -10,7 +10,7 @@ local localPlayer = Players.LocalPlayer
 if not _G.PBSHub then	
 	_G.PBSHub = {
 		Window = nil,
-		Connetions = {},
+		Connections = {},
 
 		-- // Wall
 		WallAutoGenerate = false,
