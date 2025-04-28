@@ -81,6 +81,7 @@ ReGui:Init({
 
 _G.PBSHub.Window = ReGui:Window({
 	Title = "PBS Script",
+	Size = UDim2.new(0, 400, 0, 250),
 	NoClose = true,
 }):Center()
 
