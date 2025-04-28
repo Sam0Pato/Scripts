@@ -7,7 +7,7 @@ local Players = game:GetService("Players")
 
 local localPlayer = Players.LocalPlayer
 
-if not _G.PBSHub then	
+if not _G.PBSHub then
 	_G.PBSHub = {
 		Window = nil,
 		Connections = {},
@@ -79,16 +79,15 @@ ReGui:Init({
 	Prefabs = InsertService:LoadLocalAsset(PrefabsId)
 })
 
-_G.PBSHub.Window = ReGui:Window({
-	Title = "PBS Script",
-	Size = UDim2.new(0, 400, 0, 250),
-	NoClose = true,
-}):Center()
+local window = ReGui:Window({ Title = "PBS Script", NoClose = true }):Center()
+local page = window:CreateTab({ Name = "Main" })
+
+_G.PBSHub.Window = window
 
 
 -- // Wall
 
-local wallSection = createSection(_G.PBSHub.Window, "Walls")
+local wallSection = createSection(page, "Walls")
 
 wallSection:Checkbox({
 	Label = "AutoWallEnabled",
