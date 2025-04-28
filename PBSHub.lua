@@ -6,6 +6,7 @@ local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
 
 local localPlayer = Players.LocalPlayer
+local window = nil
 
 if not _G.PBSHub then
 	_G.PBSHub = {
@@ -48,7 +49,7 @@ end
 local function createSection(Parent, Title)
 	local Region = Parent:Region({
 		Border = true,
-		BorderColor = _G.PBSHub.Window:GetThemeKey("Border"),
+		BorderColor = window:GetThemeKey("Border"),
 		BorderThickness = 1,
 		CornerRadius = UDim.new(0, 5)
 	})
@@ -79,15 +80,13 @@ ReGui:Init({
 	Prefabs = InsertService:LoadLocalAsset(PrefabsId)
 })
 
-local window = ReGui:Window({ Title = "PBS Hub", NoClose = true, Size = UDim2.new(0, 300, 0, 125) }):Center()
-local page = window:CreateTab({ Name = "Main" })
-
+window = ReGui:Window({ Title = "PBS Hub", NoClose = true, Size = UDim2.fromOffset(300, 125) }):Center()
 _G.PBSHub.Window = window
 
 
 -- // Wall
 
-local wallSection = createSection(page, "Walls")
+local wallSection = createSection(window, "Walls")
 
 wallSection:Checkbox({
 	Label = "AutoWallEnabled",
@@ -140,7 +139,7 @@ wallSection:Button({
 
 -- // Magnet
 
-local magnetSection = createSection(_G.PBSHub.Window, "Walls")
+local magnetSection = createSection(window, "Walls")
 
 magnetSection:Checkbox({
 	Label = "FollowMouse",
