@@ -17,11 +17,11 @@ if not _G.PBSHub then
 		WallAutoGenerate = false,
 		WallSizeX = 5,
 		WallSizeY = 4,
-		WallType = "Paper",
+		WallType = 1,
 
 		-- // Magnet
 		MagnetFollowMouse = true,
-		MagnetMode = "Paper"
+		MagnetMode = 4
 	}
 else
 	_G.PBSHub.Window:Close()
@@ -121,8 +121,8 @@ wallSection:InputInt({
 
 wallSection:Combo({
 	Label = "WallType",
-	Selected = _G.PBSHub.WallType,
 	Items = { "Paper", "Door" },
+	Selected = _G.PBSHub.WallType,
 	Callback = function(self, value)
 		_G.PBSHub.WallType = value
 	end
@@ -152,8 +152,8 @@ magnetSection:Checkbox({
 
 magnetSection:Combo({
 	Label = "MagnetMode",
-	Selected = _G.PBSHub.MagnetMode,
 	Items = { "All", "Wet Floor Sign", "Doors", "Papers" },
+	Selected = _G.PBSHub.MagnetMode,
 	Callback = function(self, value)
 		_G.PBSHub.MagnetMode = value
 	end,
@@ -171,8 +171,6 @@ magnetSection:Combo({
 
 magnetSection:Button({
 	Label = "Attack Target",
-	Selected = Players:GetPlayers()[1],
-	Items = function() return Players:GetPlayers() end,
 	Callback = function()
 		attackTarget()
 	end,
