@@ -1,190 +1,180 @@
+
 -- << VARIABLES >> --
-local UserInputService = game:GetService("UserInputService")
-local StarterGui = game:GetService("StarterGui")
+
+local InsertService = game:GetService("InsertService")
 local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
 
 local localPlayer = Players.LocalPlayer
-local mouse = localPlayer:GetMouse()
 
-local paperFolder = workspace:FindFirstChild("PaperFolder") or Instance.new("Folder", workspace)
-paperFolder.Name = "PaperFolder"
+if not _G.PBSHub then	
+	_G.PBSHub = {
+		Window = nil,
+		Connetions = {},
 
-local mousePositionAttachment = workspace.Terrain:FindFirstChild("Target") or Instance.new("Attachment", workspace.Terrain)
-mousePositionAttachment.Name = "Target"
+		-- // Wall
+		WallAutoGenerate = false,
+		WallSizeX = 5,
+		WallSizeY = 4,
+		WallType = "Paper",
 
-local mouseHitAttachment = workspace.Terrain:FindFirstChild("Hit") or Instance.new("Attachment", workspace.Terrain)
-mouseHitAttachment.Name = "Hit"
-
-local debounce = false
-local autoWall = false
-
--- << LOADING >> --
-if _G.PBSHub then
-	for _, connection in pairs(_G.PBSHub.Connections) do
-		connection:Disconnect()
-	end
-	StarterGui:SetCore("SendNotification", {
-		Title = "PBS Hub Reloaded ☑",
-		Icon = "rbxassetid://89210547385522",
-		Text = "Successfully reloaded!",
-		Duration = 3
-	})
-else
-	_G.PBSHub = { Connections = {} }
-	StarterGui:SetCore("SendNotification", {
-		Title = "PBS Hub Loaded 🥵👅",
-		Icon = "rbxassetid://83150944197304",
-		Text = "Press E to toggle walls\nPress Q to activate tools",
-		Duration = 3
-	})
-end
-
--- << NETWORK CONTROL >> --
-if not getgenv().Network then
-	getgenv().Network = {
-		BaseParts = {},
-		Velocity = Vector3.new(14.46, 14.46, 14.46)
+		-- // Magnet
+		MagnetFollowMouse = true,
+		MagnetMode = "Paper"
 	}
-
-	function Network.RetainPart(part)
-		if part:IsA("BasePart") and part:IsDescendantOf(workspace) then
-			part.CanCollide = false
-			table.insert(Network.BaseParts, part)
-		end
+else
+	_G.PBSHub.Window:Close()
+	
+	for _,conn in _G.PBSHub.Connections do
+		conn:Disconnect()
 	end
-
-	local function EnablePartControl()
-		localPlayer.ReplicationFocus = workspace
-		RunService.Heartbeat:Connect(function()
-			sethiddenproperty(localPlayer, "SimulationRadius", math.huge)
-			for _, part in pairs(Network.BaseParts) do
-				if part:IsDescendantOf(workspace) then
-					part.Velocity = Network.Velocity
-				end
-			end
-		end)
-	end
-	EnablePartControl()
 end
 
--- << MAIN FUNCTIONS >> --
-local function activateTools()
-	if debounce then return end
-	debounce = true
+-- << FUNCTIONS >> --
 
+local function generatePaper()
 	local backpack = localPlayer.Backpack
-	for _, tool in ipairs(backpack:GetChildren()) do
+	
+	for _, tool in next, backpack:GetChildren() do
 		if tool.Name == "TpRoll" then
 			tool.Parent = localPlayer.Character
 			tool:Activate()
 			tool.Parent = backpack
 		end
 	end
-
-	task.wait(0.8)
-	debounce = false
 end
 
-local function createWall()
-	if not autoWall or debounce then return end
-	debounce = true
 
-	activateTools()
-	task.wait(0.2)
+local function createSection(Parent, Title)
+	local Region = Parent:Region({
+		Border = true,
+		BorderColor = _G.PBSHub.Window:GetThemeKey("Border"),
+		BorderThickness = 1,
+		CornerRadius = UDim.new(0, 5)
+	})
 
-	local papers = paperFolder:GetChildren()
-	if #papers == 0 then
-		debounce = false
-		return
-	end
+	Region:Label({
+		Text = Title
+	})
 
-	local cam = workspace.CurrentCamera
-	local forward = (cam.CFrame.LookVector * Vector3.new(1, 0, 1)).Unit
-	local right = Vector3.new(-forward.Z, 0, forward.X).Unit
-	local startPos = mouseHitAttachment.WorldPosition
-
-	local cols = math.ceil(math.sqrt(#papers))
-	local rows = math.ceil(#papers / cols)
-	local partSize = papers[1].Size
-
-	for i, part in ipairs(papers) do
-		for _, obj in ipairs(part:GetChildren()) do
-			if obj:IsA("AlignPosition") or obj:IsA("AlignOrientation") then
-				obj:Destroy()
-			end
-		end
-
-		local col = (i - 1) % cols
-		local row = math.floor((i - 1) / cols)
-		local offset = right * (col - cols/2) * partSize.X + Vector3.new(0, row * partSize.Y, 0)
-
-		Instance.new("Attachment", part)
-
-		local alignPos = Instance.new("AlignPosition")
-		alignPos.Mode = "OneAttachment"
-		alignPos.Attachment0 = part.Attachment
-		alignPos.RigidityEnabled = true
-		alignPos.Position = startPos + offset
-		alignPos.Parent = part
-
-		local alignOri = Instance.new("AlignOrientation")
-		alignOri.Mode = "OneAttachment"
-		alignOri.Attachment0 = part.Attachment
-		alignOri.RigidityEnabled = true
-		alignOri.CFrame = CFrame.lookAt(alignPos.Position, alignPos.Position + forward)
-		alignOri.Parent = part
-	end
-
-	task.wait(0.8)
-	debounce = false
+	return Region
 end
 
--- << INPUT HANDLING >> --
-local function onInputBegan(input, processed)
-	if processed then return end
+-- << MAIN >> --
 
-	if input.KeyCode == Enum.KeyCode.E then
-		autoWall = not autoWall
-		StarterGui:SetCore("SendNotification", {
-			Title = "Auto Wall",
-			Text = autoWall and "ENABLED" or "DISABLED",
-			Duration = 2
-		})
-	elseif input.KeyCode == Enum.KeyCode.Q then
-		activateTools()
-	end
+local function generateWall()
+	generatePaper()
 end
 
--- << SETUP >> --
 
-local function onChildAdded(child)	
-	if child:IsA("BasePart") and not child.Anchored then
-		RunService.RenderStepped:Wait()
-
-		child.Parent = paperFolder
-		child.CollisionGroup = "Players"
-		Network.RetainPart(child)
-	end
+local function attackTarget()
+	generatePaper()
 end
 
-table.insert(_G.PBSHub.Connections, UserInputService.InputBegan:Connect(onInputBegan))
-table.insert(_G.PBSHub.Connections, workspace.onChildAdded:Connect(onChildAdded))
-table.insert(_G.PBSHub.Connections, mouse.Button1Down:Connect(function()
-	mouseHitAttachment.Position = mouse.Hit.Position
-end))
-table.insert(_G.PBSHub.Connections, RunService.Heartbeat:Connect(function()
-	sethiddenproperty(localPlayer, "SimulationRadius", math.huge)
+-- << INTERFACE >> --
+
+local ReGui = loadstring(game:HttpGet('https://raw.githubusercontent.com/depthso/Dear-ReGui/refs/heads/main/ReGui.lua'))()
+local PrefabsId = "rbxassetid://" .. ReGui.PrefabsId
+ReGui:Init({
+	Prefabs = InsertService:LoadLocalAsset(PrefabsId)
+})
+
+_G.PBSHub.Window = ReGui:Window({
+	Title = "PBS Script",
+	NoClose = true,
+}):Center()
+
+
+-- // Wall
+
+local wallSection = createSection(_G.PBSHub.Window, "Walls")
+
+wallSection:Checkbox({
+	Label = "AutoWallEnabled",
+	Value = _G.PBSHub.WallAutoGenerate,
+	Callback = function(self, value)
+		_G.PBSHub.WallAutoGenerate = value
+	end,
+})
 	
-	if autoWall then
-		createWall()
+	
+wallSection:InputInt({
+	Label = "WallSizeX",
+	Value = _G.PBSHub.WallSizeX,
+	Maximum = 100,
+	Minimum = 1,
+	Callback = function(self, value)
+		_G.PBSHub.WallSizeX = value
 	end
-end))
+})
 
--- << FINAL INIT >> --
-for _,child in next, workspace:GetDescendants() do
-	if child.Parent.Parent ~= workspace then
-		onChildAdded(child)
+
+wallSection:InputInt({
+	Label = "WallSizeY",
+	Value = _G.PBSHub.WallSizeY,
+	Maximum = 100,
+	Minimum = 1,
+	Callback = function(self, value)
+		_G.PBSHub.WallSizeY = value
 	end
-end
-localPlayer.ReplicationFocus = workspace
+})
+
+
+wallSection:Combo({
+	Label = "WallType",
+	Selected = _G.PBSHub.WallType,
+	Items = { "Paper", "Door" },
+	Callback = function(self, value)
+		_G.PBSHub.WallType = value
+	end
+})
+
+
+wallSection:Button({
+	Label = "Generate Wall",
+	Callback = function()
+		generateWall()
+	end
+})
+
+
+-- // Magnet
+
+local magnetSection = createSection(_G.PBSHub.Window, "Walls")
+
+magnetSection:Checkbox({
+	Label = "FollowMouse",
+	Value = _G.PBSHub.MagnetFollowMouse,
+	Callback = function(self, value)
+		_G.PBSHub.MagnetFollowMouse = value
+	end,
+})
+
+
+magnetSection:Combo({
+	Label = "MagnetMode",
+	Selected = _G.PBSHub.MagnetMode,
+	Items = { "All", "Wet Floor Sign", "Doors", "Papers" },
+	Callback = function(self, value)
+		_G.PBSHub.MagnetMode = value
+	end,
+})
+
+
+magnetSection:Combo({
+	Label = "Target",
+	PlaceHolder = "JustinBiever79070",
+	Items = function() return Players:GetPlayers() end,
+	Callback = function(self, value)
+	end,
+})
+
+
+magnetSection:Button({
+	Label = "Attack Target",
+	Selected = Players:GetPlayers()[1],
+	Items = function() return Players:GetPlayers() end,
+	Callback = function()
+		attackTarget()
+	end,
+})
