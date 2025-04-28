@@ -79,7 +79,7 @@ ReGui:Init({
 	Prefabs = InsertService:LoadLocalAsset(PrefabsId)
 })
 
-local window = ReGui:Window({ Title = "PBS Script", NoClose = true }):Center()
+local window = ReGui:Window({ Title = "PBS Hub", NoClose = true, Size = UDim2.new(0, 300, 0, 125) }):Center()
 local page = window:CreateTab({ Name = "Main" })
 
 _G.PBSHub.Window = window
