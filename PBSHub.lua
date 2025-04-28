@@ -25,7 +25,7 @@ if not _G.PBSHub then
 else
 	_G.PBSHub.Window:Close()
 	
-	for _,conn in _G.PBSHub.Connections do
+	for _,conn in pairs(_G.PBSHub.Connections) do
 		conn:Disconnect()
 	end
 end
